@@ -2,6 +2,7 @@ package com.rm.mywater;
 
 import android.app.Application;
 
+import com.rm.mywater.util.Dimen;
 import com.rm.mywater.util.DrinkUtil;
 import com.rm.mywater.util.Prefs;
 
@@ -15,6 +16,7 @@ public class MyWaterApplication extends Application {
         super.onCreate();
 
         Prefs.init(this);
+        Dimen.init(this);
         DrinkUtil.init(this);
     }
 }
