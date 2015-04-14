@@ -5,9 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.rm.mywater.model.Day;
 import com.rm.mywater.model.Drink;
+import com.rm.mywater.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +20,8 @@ import java.util.List;
  * Created by alex on 07/04/15.
  */
 public class DrinkHistoryDatabase extends SQLiteOpenHelper {
+
+    private static final String TAG = "DrinkHistoryDatabase";
 
     private static final String DATABASE_NAME = "water_data";
 
@@ -40,7 +45,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
                     DAYS_TABLE +
                     " ( " +
                     COL_START_TIME   + " INTEGER PRIMARY KEY," +
-                    COL_PERCENT      + " INTEGER NOT NULL," +
+                    COL_PERCENT      + " INTEGER NOT NULL" +
                     " ) ";
 
     private static final String TIMELINE_TABLE_CREATE =
@@ -49,7 +54,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
                     " ( " +
                     COL_TIME        + " INTEGER PRIMARY KEY," +
                     COL_DRINK_ID    + " INTEGER NOT NULL," +
-                    COL_VOLUME      + " FLOAT NOT NULL," +
+                    COL_VOLUME      + " FLOAT NOT NULL" +
                     " ) ";
     //endregion
 
@@ -59,6 +64,8 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        Log.d(TAG, "onCreate DB");
 
         db.execSQL(DAYS_TABLE_CREATE);
         db.execSQL(TIMELINE_TABLE_CREATE);
@@ -81,6 +88,8 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
                         + COL_TIME + " >= " + day.getStartTime()
                 + " AND "
                         + COL_TIME + " < " + day.getEndTime();
+
+        Log.d(TAG, "Query for getTimeline is:\n" + selectQuery);
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -105,6 +114,8 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
         Collections.reverse(drinks);
 
+        Log.d(TAG, "Get timeline for " + day.getStartTime() + ": " + drinks.size() + " drinks");
+
         return drinks;
     }
 
@@ -117,6 +128,8 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
         String selectQuery =
                 "SELECT * FROM " + DAYS_TABLE;
+
+        Log.d(TAG, "Query for getDays is:\n" + selectQuery);
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -140,6 +153,8 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
         Collections.reverse(days);
 
+        Log.d(TAG, "Get days, count: " + days.size());
+
         return days;
     }
     //endregion
@@ -154,6 +169,8 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
         values.put(COL_DRINK_ID, drink.getType());
         values.put(COL_VOLUME, drink.getVolume());
 
+        Log.d(TAG, "Adding drink, id = " + drink.getType() + " vol = " + drink.getVolume());
+
         db.insert(TIMELINE_TABLE, null, values);
         db.close();
 
@@ -166,6 +183,11 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COL_START_TIME, day.getStartTime());
         values.put(COL_PERCENT, day.getPercent());
+
+        Log.d(TAG, "addDay: startTime is "    + day.getStartTime()
+                        + " current time is " + TimeUtil.unixtime());
+
+        Log.d(TAG, "addDay: percent = " + day.getPercent());
 
         db.insert(DAYS_TABLE, null, values);
         db.close();
@@ -189,12 +211,17 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
                 null
         );
 
+        Log.d(TAG, "updateDay: startTime = " + day.getStartTime()
+                           + " percent = "   + day.getPercent());
+
         db.close();
     }
     //endregion
 
     //region Delete
     public static void deleteDrink(Context context, Drink drink) {
+
+        Log.d(TAG, "DeleteDrink: " + drink.getTime());
 
         SQLiteDatabase db = new DrinkHistoryDatabase(context).getWritableDatabase();
 
@@ -203,7 +230,6 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
         db.close();
     }
     //endregion
-
 
     @Deprecated
     public static boolean isDayExist(Context context, long time) {
@@ -229,10 +255,12 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
     }
 
     //region Helper method
-    private static ArrayList<Day> formatList(ArrayList<Day> rawDays) {
+    private static ArrayList<Day> formatList(@NonNull ArrayList<Day> rawDays) {
 
         ArrayList<Day> res = new ArrayList<>();
         int size = rawDays.size();
+
+        Log.d(TAG, "FormatList: size of initial list is " + size);
 
         if (size > 1) {
 
@@ -254,6 +282,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
             }
 
+            // here we add the last one, because we avoid it in cycle
             res.add(rawDays.get(size - 1));
 
         } else {

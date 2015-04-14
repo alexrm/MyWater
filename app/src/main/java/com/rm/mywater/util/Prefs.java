@@ -2,11 +2,14 @@ package com.rm.mywater.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 /**
  * Created by alex on 08/04/15.
  */
 public class Prefs {
+
+    private static final String TAG = "Prefs";
 
     //region Keys
 
@@ -100,10 +103,18 @@ public class Prefs {
             sEditor.putBoolean(key, (Boolean) value);
         }
 
+        Log.d(TAG, "put: key(" + key + ") value(" + value + ")");
+
     }
 
     public static SharedPreferences get() {
 
+        return sPreferences;
+    }
+
+    public static SharedPreferences get(Context c) {
+
+        init(c);
         return sPreferences;
     }
 
@@ -132,16 +143,26 @@ public class Prefs {
 
     public static int getPercent() {
 
-        return sPreferences.getInt(KEY_CURRENT_PERCENT, 0);
+        int percent = sPreferences.getInt(KEY_CURRENT_PERCENT, 0);
+
+        Log.d(TAG, "getPercent: " + percent + "%");
+
+        return percent;
     }
 
     public static float getBaseVol() {
 
-        return sPreferences.getFloat(KEY_BASE_TARGET_VOL, 0);
+        float baseVol = sPreferences.getFloat(KEY_CURRENT_TARGET_VOL, 0);
+
+        Log.d(TAG, "getBaseVol: " + baseVol);
+
+        return baseVol;
     }
 
     // TODO make everything 0 every day
     public static void clear() {
+
+        Log.d(TAG, "Clear");
 
         sEditor.putInt(KEY_CURRENT_PERCENT, 0);
         sEditor.putFloat(KEY_CURRENT_USER_VOL, 0);
