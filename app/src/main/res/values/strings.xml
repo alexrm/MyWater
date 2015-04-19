@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">MyWater</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="settings_metric_unit">Единицы измерения</string>
+    <string name="settings_english_units">Английская</string>
+    <string name="settings_metric_units">Метрическая</string>
+
+    <string name="settings_gender">Пол</string>
+    <string name="settings_male">Мужской</string>
+    <string name="settings_female">Женский</string>
+
+    <string name="settings_weight">Вес</string>
+    <string name="settings_set_weight">Укажи вес</string>
+    <string name="settings_trainings">Тренировки</string>
+
 </resources>

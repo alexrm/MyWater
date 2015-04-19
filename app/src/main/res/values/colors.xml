@@ -2,10 +2,13 @@
 <resources>
     <item name="color_primary" type="color">#34aedd</item>
     <item name="color_primary_dark" type="color">#2c94bc</item>
-    <item name="window_background" type="color">#fff</item>
+    <item name="window_background" type="color">#e2f2f8</item>
     <item name="color_accent" type="color">#EEEEEE</item>
     <item name="color_accent_dark" type="color">#E0E0E0</item>
+    <item name="color_activated_highlight" type="color">#c4d5db</item>
     <item name="color_white" type="color">#fff</item>
+
+
 
     <!--TODO These attrs are keeping here for nav drawer-->
     <!--<color name="navigation_profile_background">#3f506c</color>-->

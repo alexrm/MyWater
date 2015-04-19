@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.rm.mywater.base.BaseActivity;
+import com.rm.mywater.ui.SettingsFragment;
 
 
 public class MainActivity extends BaseActivity {
@@ -16,6 +17,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new SettingsFragment()).commit();
     }
 
     @Override
@@ -40,4 +43,5 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
