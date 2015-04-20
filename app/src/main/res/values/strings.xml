@@ -14,5 +14,11 @@
     <string name="settings_weight">Вес</string>
     <string name="settings_set_weight">Укажи вес</string>
     <string name="settings_trainings">Тренировки</string>
+    <string name="volume_descr">В день тебе необходимо выпивать 1,8 л\n воды, но при желании ты можешь\n изменить эту цифру</string>
+    <string name="volume_placeholder">1800 мл</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings_physical_load">Физические нагрузки</string>
 
 </resources>

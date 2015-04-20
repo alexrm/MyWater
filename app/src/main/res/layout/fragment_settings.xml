@@ -1,216 +1,203 @@
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.rm.mywater.ui.SettingsFragment"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    >
 
-    <LinearLayout
-        android:id="@+id/radio_box"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:weightSum="2"
-        android:baselineAligned="false">
+        android:padding="16dp"
+        android:clipToPadding="false">
 
-        <RelativeLayout
-            android:layout_width="0dp"
+
+        <TextView
+            android:id="@+id/metric_unit"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="start">
+            android:paddingRight="6dp"
+            android:paddingLeft="6dp"
+            android:textSize="14sp"
+            android:text="@string/settings_metric_unit"/>
 
-            <TextView
-                android:id="@+id/metric_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="6dp"
-                android:paddingLeft="6dp"
-                android:textSize="14sp"
-                android:text="@string/settings_metric_unit"/>
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/metric_unit"
-                android:layout_marginTop="8dp">
-
-                <RadioButton
-                    android:id="@+id/radio_metric"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:textSize="16sp"
-                    android:text="@string/settings_metric_units"
-                    android:checked="true"
-                    />
-
-                <RadioButton
-                    android:id="@+id/radio_english"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:textSize="16sp"
-                    android:text="@string/settings_english_units"
-                    />
-
-                </RadioGroup>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
+        <RadioGroup
+            android:id="@+id/unit_radio"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="end">
+            android:layout_below="@id/metric_unit"
+            android:weightSum="2"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/gender"
-                android:layout_width="wrap_content"
+            <RadioButton
+                android:id="@+id/radio_metric"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingRight="6dp"
-                android:paddingLeft="6dp"
-                android:textSize="14sp"
-                android:text="@string/settings_gender"/>
+                android:layout_weight="1"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="2dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:textSize="15sp"
+                android:text="@string/settings_metric_units"
+                android:textColor="@android:color/secondary_text_light"
+                android:checked="true"
+                />
 
-            <RadioGroup
-                android:layout_width="wrap_content"
+            <RadioButton
+                android:id="@+id/radio_english"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/gender"
-                android:layout_marginTop="8dp">
+                android:layout_weight="1"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="2dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:textSize="15sp"
+                android:text="@string/settings_english_units"
+                android:textColor="@android:color/secondary_text_light"
+                />
 
-                <RadioButton
-                    android:id="@+id/radio_male"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:textSize="16sp"
-                    android:text="@string/settings_male"
-                    android:checked="true"
-                    />
+        </RadioGroup>
 
-                <RadioButton
-                    android:id="@+id/radio_female"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:textSize="16sp"
-                    android:text="@string/settings_female"
-                    />
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/unit_radio"
+            android:paddingRight="6dp"
+            android:paddingLeft="6dp"
+            android:textSize="14sp"
+            android:text="@string/settings_gender"
+            />
 
-            </RadioGroup>
+        <RadioGroup
+            android:id="@+id/gender_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gender"
+            android:weightSum="2"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
 
-        </RelativeLayout>
+            <RadioButton
+                android:id="@+id/radio_male"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="2dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:textSize="15sp"
+                android:text="@string/settings_male"
+                android:textColor="@android:color/secondary_text_light"
+                android:checked="true"
+                />
 
-    </LinearLayout>
+            <RadioButton
+                android:id="@+id/radio_female"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="2dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:textSize="15sp"
+                android:text="@string/settings_female"
+                android:textColor="@android:color/secondary_text_light"
+                />
 
-    <TextView
-        android:id="@+id/weight_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/radio_box"
-        android:paddingRight="6dp"
-        android:paddingLeft="6dp"
-        android:layout_marginTop="8dp"
-        android:textSize="14sp"
-        android:text="@string/settings_weight"/>
+        </RadioGroup>
 
-    <TextView
-        android:id="@+id/set_weight_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/weight_text"
-        android:paddingRight="6dp"
-        android:paddingLeft="6dp"
-        android:layout_marginTop="16dp"
-        android:textSize="18sp"
-        android:text="@string/settings_set_weight"
-        android:clickable="true"/>
+        <TextView
+            android:id="@+id/weight_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gender_radio"
+            android:paddingRight="6dp"
+            android:paddingLeft="6dp"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            android:text="@string/settings_weight"/>
 
-    <View
-        android:id="@+id/weight_separator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/set_weight_text"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:background="#cccc"
-        />
+        <TextView
+            android:id="@+id/set_weight_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/weight_text"
+            android:paddingRight="6dp"
+            android:paddingLeft="6dp"
+            android:layout_marginTop="8dp"
+            android:textSize="18sp"
+            android:text="@string/settings_set_weight"
+            android:textColor="@android:color/secondary_text_light"
+            android:clickable="true"/>
 
-    <TextView
-        android:id="@+id/training_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/weight_separator"
-        android:paddingRight="6dp"
-        android:paddingLeft="6dp"
-        android:layout_marginTop="8dp"
-        android:textSize="14sp"
-        android:text="@string/settings_trainings"/>
+        <View
+            android:id="@+id/weight_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/set_weight_text"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="#cccc"
+            />
 
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/training_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/training_text"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:checked="true"/>
+        <include
+            android:id="@+id/training_box"
+            layout="@layout/box_training"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/weight_separator"/>
 
-    <TextView
-        android:id="@+id/trainings_switch_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/training_text"
-        android:layout_toRightOf="@id/training_switch"
-        android:layout_toEndOf="@+id/training_switch"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textSize="18sp"
-        android:text="@string/settings_trainings"
-        android:clickable="true"/>
+        <TextView
+            android:id="@+id/volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/training_box"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="14sp"
+            android:text="@string/volume_descr"
+            android:gravity="center"
+            />
 
-    <TextView
-        android:id="@+id/volume"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/training_switch"
-        android:layout_marginTop="16dp"
-        android:textSize="14sp"
-        android:text="В день тебе необходимо выпивать 1,8 л\n воды, но при желании ты можешь\n изменить эту цифру"
-        android:gravity="center"
-        />
+        <TextView
+            android:id="@id/volume_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/volume_seek"
+            android:layout_below="@id/volume"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textSize="14sp"
+            android:text="@string/volume_placeholder"
+            />
 
-    <TextView
-        android:id="@+id/volume_text"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/volume"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:gravity="center_vertical"
-        android:textSize="14sp"
-        android:text="1800 мл"
-        />
+        <SeekBar
+            android:id="@id/volume_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/volume"
+            android:layout_toLeftOf="@id/volume_text"
+            android:layout_toStartOf="@id/volume_text"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:progress="24"/>
 
-    <SeekBar
-        android:id="@+id/volume_seek"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_below="@id/volume"
-        android:layout_toLeftOf="@id/volume_text"
-        android:layout_toStartOf="@id/volume_text"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:progress="24"/>
+    </RelativeLayout>
+</ScrollView>
 
-</RelativeLayout>

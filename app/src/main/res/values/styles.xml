@@ -4,8 +4,8 @@
 
         <item name="android:windowBackground">@color/window_background</item>
         <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorAccent">@color/color_accent</item>
-        <item name="android:colorActivatedHighlight">@color/color_activated_highlight</item>
+        <item name="colorAccent">#2c94bc</item>
+        <item name="android:colorActivatedHighlight">#f00</item>
 
     </style>
 

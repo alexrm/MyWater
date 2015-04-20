@@ -19,7 +19,9 @@ public class MainActivity extends BaseActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, new SettingsFragment()).commit();
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
