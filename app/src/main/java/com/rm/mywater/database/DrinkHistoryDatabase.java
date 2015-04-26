@@ -14,7 +14,6 @@ import com.rm.mywater.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by alex on 07/04/15.
@@ -75,7 +74,14 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
     //region Main getters
-    public static List<Drink> getTimeline(Context context, Day day) {
+    public static void retrieveTimeline(Context context, Day day,
+                                                    OnDataRetrievedListener listener) {
+
+        if (day == null) {
+
+            listener.onError("Null day");
+            return;
+        }
 
         SQLiteDatabase      db       = new DrinkHistoryDatabase(context).getReadableDatabase();
         ArrayList<Drink>    drinks   = new ArrayList<>();
@@ -89,7 +95,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
                 + " AND "
                         + COL_TIME + " < " + day.getEndTime();
 
-        Log.d(TAG, "Query for getTimeline is:\n" + selectQuery);
+        Log.d(TAG, "Query for retrieveTimeline is:\n" + selectQuery);
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -116,11 +122,11 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
         Log.d(TAG, "Get timeline for " + day.getStartTime() + ": " + drinks.size() + " drinks");
 
-        return drinks;
+        listener.onDataReceived(drinks);
     }
 
     // should return even empty days
-    public static List<Day> getDays(Context context) {
+    public static void retrieveDays(Context context, OnDataRetrievedListener listener) {
 
         SQLiteDatabase  db      = new DrinkHistoryDatabase(context).getReadableDatabase();
         ArrayList<Day>  rawDays = new ArrayList<>();
@@ -129,7 +135,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
         String selectQuery =
                 "SELECT * FROM " + DAYS_TABLE;
 
-        Log.d(TAG, "Query for getDays is:\n" + selectQuery);
+        Log.d(TAG, "Query for retrieveDays is:\n" + selectQuery);
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -137,13 +143,30 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
             do {
 
+                int percent = cursor.getInt(cursor.getColumnIndex(COL_PERCENT));
+                long startTime = cursor.getInt(cursor.getColumnIndex(COL_START_TIME));
+
+                Log.d(TAG, "Getting day: Time - "    + startTime
+                                     + " Percent - " + percent);
+
                 Day day = new Day();
 
-                day.setPercent(cursor.getInt(cursor.getColumnIndex(COL_PERCENT)));
-                day.setStartTime(cursor.getInt(cursor.getColumnIndex(COL_START_TIME)));
+                day.setPercent(percent);
+                day.setStartTime(startTime);
+
+                rawDays.add(day);
 
             } while (cursor.moveToNext());
 
+        } else {
+
+            cursor.close();
+            db.close();
+
+            listener.onError("Retrieve days cursor failure, " +
+                    "cursor rows count: " + cursor.getCount());
+
+            return;
         }
 
         cursor.close();
@@ -155,7 +178,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
         Log.d(TAG, "Get days, count: " + days.size());
 
-        return days;
+        listener.onDataReceived(days);
     }
     //endregion
 

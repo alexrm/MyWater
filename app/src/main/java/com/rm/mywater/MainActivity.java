@@ -5,7 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.rm.mywater.base.BaseActivity;
-import com.rm.mywater.ui.SettingsFragment;
+import com.rm.mywater.ui.StatisticsFragment;
 
 
 public class MainActivity extends BaseActivity {
@@ -17,8 +17,21 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        for (int i = 0; i < 20; i++) {
+//
+//            DrinkHistoryDatabase.addDrink(this, Drink.getDummy());
+//
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+//        ArrayList<Day> days = DrinkHistoryDatabase.retrieveDays(this);
+
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new SettingsFragment()).commit();
+                .replace(R.id.container, new StatisticsFragment()).commit();
 
     }
 

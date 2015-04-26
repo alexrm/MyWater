@@ -11,6 +11,7 @@
         android:paddingLeft="6dp"
         android:layout_marginTop="8dp"
         android:textSize="14sp"
+        android:textColor="@color/color_settings_title"
         android:text="@string/settings_physical_load"/>
 
     <Switch
@@ -31,7 +32,6 @@
         android:layout_height="1dp"
         android:layout_below="@id/training_switch"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:background="#cccc"
         />
 

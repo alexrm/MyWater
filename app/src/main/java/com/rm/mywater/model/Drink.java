@@ -1,6 +1,10 @@
 package com.rm.mywater.model;
 
+import android.util.Log;
+
 import com.rm.mywater.util.TimeUtil;
+
+import java.util.Random;
 
 /**
  * Created by alex on 07/04/15.
@@ -37,17 +41,27 @@ public class Drink {
     private float       mVolume;
     private long        mTime; // unix time
 
-    public Drink(int type, int volume) {
+    public Drink(int type, float volume) {
 
         setType(type);
+        setVolume(volume);
 
-        this.mVolume = volume;
-        this.mTime   = TimeUtil.unixtime();
+        setTime(TimeUtil.unixtime());
     }
 
     public Drink() {
 
         // empty constructor
+    }
+
+    // for debug
+    public static Drink getDummy() {
+
+        Log.d("DRINK", "Getting dummy");
+
+        Random r = new Random();
+
+        return new Drink(r.nextInt(8) + 1, r.nextInt(1000));
     }
 
     //region Getters

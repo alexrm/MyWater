@@ -33,13 +33,46 @@ public class DrinkUtil {
         return kg*2.2F;
     }
 
-    public static float getOz(float liters) {
+    public static float getOz(float milliliters) {
 
-        return liters*34;
+        return milliliters*0.034F;
     }
 
-    public static float getLiters(float oz) {
+    public static float getMilliliters(float oz) {
 
-        return oz/34;
+        return oz/0.034F;
+    }
+
+    public static String getTitle(int type) {
+
+        switch (type) {
+
+            case Drink.WATER: return "Вода";
+
+            case Drink.ALCOHOL: return "Алкоголь";
+
+            case Drink.TEA: return "Чай";
+
+            case Drink.COFFEE: return "Кофе";
+
+            case Drink.ENERGY: return "Энергетик";
+
+            case Drink.JUICE: return "Сок";
+
+            case Drink.MILK: return "Молоко";
+
+            case Drink.SODA: return "Газировка";
+
+            case Drink.OTHER: return "Другой напиток";
+
+            default: return "Другой напиток";
+        }
+    }
+
+    public static int getDrinkIcon(int type) {
+
+        // TODO implement this
+
+        return -1;
     }
 }

@@ -41,6 +41,16 @@ public class TimeUtil {
         return result;
     }
 
+    public static String getTime(long unix) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(unix * 1000);
+
+        return String.format("%2d:%02d",
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE));
+    }
+
     public static boolean isNotificationTime() {
 
         Calendar currentTime = Calendar.getInstance();
