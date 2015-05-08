@@ -8,18 +8,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.rm.mywater.R;
+import com.rm.mywater.util.base.BaseFragment;
 import com.rm.mywater.views.SlidingTabLayout;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StatisticsFragment extends Fragment {
-
+public class StatisticsFragment extends BaseFragment {
 
     private static final int DAYS = 0;
     private static final int OVERALL = 1;
@@ -43,6 +44,18 @@ public class StatisticsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (mToolbar != null) {
+            mToolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back);
+
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
         mViewPager      = (ViewPager)        view.findViewById(R.id.timeline_pager);
         mFriendsTabs    = (SlidingTabLayout) view.findViewById(R.id.timeline_tabs);
 
@@ -53,10 +66,12 @@ public class StatisticsFragment extends Fragment {
         mFriendsTabs.setSelectedIndicatorColors(Color.WHITE);
     }
 
-    private class TabPagerAdapter extends FragmentStatePagerAdapter {
+    private class TabPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
 
         public TabPagerAdapter(FragmentManager fm) {
             super(fm);
+
+            mFriendsTabs.setOnPageChangeListener(this);
         }
 
         @Override
@@ -65,7 +80,7 @@ public class StatisticsFragment extends Fragment {
             switch (position) {
 
                 case DAYS:    return new DaysFragment();
-                case OVERALL: return new OverallFragment();
+                case OVERALL: return OverallFragment.getInstance();
                 default:      return new Fragment();
             }
         }
@@ -91,6 +106,39 @@ public class StatisticsFragment extends Fragment {
             }
 
             return "Error";
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+            switch (position) {
+
+                case OVERALL: {
+
+                    OverallFragment
+                            .getInstance()
+                            .onFragmentAction(null, -1);
+                    break;
+                }
+
+                case DAYS: {
+
+                    Log.d("TabPagerAdapter", "onPageSelected - position: "
+                            + "DAYS");
+
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
         }
     }
 }

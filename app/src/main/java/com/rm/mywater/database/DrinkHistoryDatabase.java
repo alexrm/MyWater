@@ -75,7 +75,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
     //region Main getters
     public static void retrieveTimeline(Context context, Day day,
-                                                    OnDataRetrievedListener listener) {
+                                        OnDataRetrievedListener listener) {
 
         if (day == null) {
 
@@ -126,7 +126,8 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
     }
 
     // should return even empty days
-    public static void retrieveDays(Context context, OnDataRetrievedListener listener) {
+    public static void retrieveDays(Context context,
+                                    OnDataRetrievedListener listener) {
 
         SQLiteDatabase  db      = new DrinkHistoryDatabase(context).getReadableDatabase();
         ArrayList<Day>  rawDays = new ArrayList<>();
@@ -208,7 +209,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
         values.put(COL_PERCENT, day.getPercent());
 
         Log.d(TAG, "addDay: startTime is "    + day.getStartTime()
-                        + " current time is " + TimeUtil.unixtime());
+                        + " current time is " + TimeUtil.unixTime());
 
         Log.d(TAG, "addDay: percent = " + day.getPercent());
 

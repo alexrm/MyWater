@@ -2,11 +2,12 @@ package com.rm.mywater.util;
 
 import android.content.Context;
 import android.os.Build;
+import android.view.View;
 
 /**
  * Created by alex on 14/04/15.
  */
-public class Dimen {
+public final class Dimen {
 
     private static Context sContext;
 
@@ -35,5 +36,10 @@ public class Dimen {
 
     public static int get(int resourceId) {
         return sContext.getResources().getDimensionPixelSize(resourceId);
+    }
+
+    public static float getPercentWidth(int percent, View v) {
+
+        return v.getWidth() * (percent / 100);
     }
 }

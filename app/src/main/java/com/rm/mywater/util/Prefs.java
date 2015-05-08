@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.rm.mywater.model.Drink;
+
+import java.util.ArrayList;
+
 /**
  * Created by alex on 08/04/15.
  */
-public class Prefs {
+public final class Prefs {
 
     private static final String TAG = "Prefs";
 
@@ -116,6 +120,28 @@ public class Prefs {
 
         init(c);
         return sPreferences;
+    }
+
+    public static int getOverall() {
+
+        return get().getInt(KEY_OVERALL_VOL, 65);
+    }
+
+    public static ArrayList<Drink> getOverallDrinks() {
+
+        ArrayList<Drink> overall = new ArrayList<>();
+
+        overall.add(new Drink(Drink.WATER, get().getFloat(KEY_OVERALL_VOL_WATER, 12.3F)));
+        overall.add(new Drink(Drink.TEA, get().getFloat(KEY_OVERALL_VOL_TEA, 3.0F)));
+        overall.add(new Drink(Drink.COFFEE, get().getFloat(KEY_OVERALL_VOL_COFFEE, 14.9F)));
+        overall.add(new Drink(Drink.MILK, get().getFloat(KEY_OVERALL_VOL_MILK, 4.5F)));
+        overall.add(new Drink(Drink.SODA, get().getFloat(KEY_OVERALL_VOL_SODA, 3.1F)));
+        overall.add(new Drink(Drink.ALCOHOL, get().getFloat(KEY_OVERALL_VOL_ALCOHOL, 7.9F)));
+        overall.add(new Drink(Drink.JUICE, get().getFloat(KEY_OVERALL_VOL_JUICE, 16.3F)));
+        overall.add(new Drink(Drink.ENERGY, get().getFloat(KEY_OVERALL_VOL_ENERGY, 3.3F)));
+        overall.add(new Drink(Drink.OTHER, get().getFloat(KEY_OVERALL_VOL_OTHER, 1.2F)));
+
+        return overall;
     }
 
     public static void commit() {

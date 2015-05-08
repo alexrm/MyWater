@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="#f1f9fc">
 
     <ImageView
-        android:id="@+id/drink_icon"
+        android:id="@+id/overall_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/drink_icon"
@@ -21,15 +21,15 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/drink_icon"
-        android:layout_toEndOf="@id/drink_icon"
+        android:layout_toRightOf="@id/overall_icon"
+        android:layout_toEndOf="@id/overall_icon"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/drink_title"
+            android:id="@+id/overall_drink_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="1dp"
@@ -38,19 +38,10 @@
             android:text="Вода"
             />
 
-        <TextView
-            android:id="@+id/drink_volume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:textColor="#a333"
-            android:textSize="14sp"
-            android:text="200 мл"/>
-
-        </LinearLayout>
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/drink_time"
+        android:id="@+id/overall_vol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -59,8 +50,8 @@
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:textColor="#a333"
-        android:textSize="14sp"
-        android:text="19:34"
+        android:textSize="16sp"
+        android:text="16 л"
         />
 
 </RelativeLayout>

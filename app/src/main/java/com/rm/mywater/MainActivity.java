@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.rm.mywater.base.BaseActivity;
+import com.rm.mywater.ui.MainFragment;
+import com.rm.mywater.util.base.BaseActivity;
+import com.rm.mywater.model.Day;
 import com.rm.mywater.ui.StatisticsFragment;
+import com.rm.mywater.ui.TimelineFragment;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements OnFragmentInteractionListener {
 
     private static final String TAG = "MainActivity";
 
@@ -31,10 +34,9 @@ public class MainActivity extends BaseActivity {
 //        ArrayList<Day> days = DrinkHistoryDatabase.retrieveDays(this);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new StatisticsFragment()).commit();
+                .replace(R.id.container, new MainFragment()).commit();
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,4 +61,14 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFragmentAction(Object data, int key) {
+
+        // TODO implement switch-case for key
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, TimelineFragment.newInstance((Day) data))
+                .addToBackStack(null)
+                .commit();
+    }
 }

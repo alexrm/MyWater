@@ -8,10 +8,9 @@ import java.util.Calendar;
 /**
  * Created by alex on 12/04/15.
  */
-public class TimeUtil {
+public final class TimeUtil {
 
     private static final String TAG = "TimeUtil";
-
     private static Context sContext;
 
     public static void init(Context context) {
@@ -19,7 +18,7 @@ public class TimeUtil {
         sContext = context;
     }
 
-    public static long unixtime() {
+    public static long unixTime() {
 
         return System.currentTimeMillis()/1000;
     }
@@ -46,9 +45,15 @@ public class TimeUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(unix * 1000);
 
-        return String.format("%2d:%02d",
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE));
+        return String.format("%tR", calendar);
+    }
+
+    public static String getDay(long unix) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(unix * 1000);
+
+        return String.format("%te %tB", calendar, calendar);
     }
 
     public static boolean isNotificationTime() {
@@ -59,6 +64,7 @@ public class TimeUtil {
 
         Log.d(TAG, "Hour of day: " + hourOfDay);
 
+        // FIXME if start > end
         int start = Prefs.get(sContext).getInt(Prefs.KEY_ALARM_START_FROM, 9);
         int end   = Prefs.get(sContext).getInt(Prefs.KEY_ALARM_WORK_UNTIL, 18);
 

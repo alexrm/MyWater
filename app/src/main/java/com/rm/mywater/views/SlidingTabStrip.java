@@ -192,5 +192,10 @@ public class SlidingTabStrip extends LinearLayout {
             mDividerColors = colors;
         }
     }
+
+    public interface OnViewPageChangeListener {
+
+        void onPageChanged(int position);
+    }
 }
 

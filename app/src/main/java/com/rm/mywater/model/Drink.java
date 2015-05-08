@@ -46,7 +46,7 @@ public class Drink {
         setType(type);
         setVolume(volume);
 
-        setTime(TimeUtil.unixtime());
+        setTime(TimeUtil.unixTime());
     }
 
     public Drink() {

@@ -9,8 +9,7 @@
         android:id="@+id/timeline_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_primary"
-        tools:ignore="UnusedAttribute"/>
+        android:background="@color/color_primary"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/timeline_pager"

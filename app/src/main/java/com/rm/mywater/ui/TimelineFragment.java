@@ -13,7 +13,10 @@ import android.view.ViewGroup;
 
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.rm.mywater.R;
-import com.rm.mywater.TimelineAdapter;
+import com.rm.mywater.adapter.DividerItemDecorator;
+import com.rm.mywater.adapter.OnItemClickListener;
+import com.rm.mywater.adapter.TimelineAdapter;
+import com.rm.mywater.util.base.BaseFragment;
 import com.rm.mywater.database.DrinkHistoryDatabase;
 import com.rm.mywater.database.OnDataRetrievedListener;
 import com.rm.mywater.model.Day;
@@ -25,8 +28,8 @@ import java.util.Collection;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TimelineFragment extends Fragment implements
-        TimelineAdapter.OnItemClickListener,
+public class TimelineFragment extends BaseFragment implements
+        OnItemClickListener,
         SwipeableRecyclerViewTouchListener.SwipeListener {
 
     private static final String TAG = "TimelineFragment";
@@ -62,6 +65,16 @@ public class TimelineFragment extends Fragment implements
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (mToolbar != null) {
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    onBackPressed();
+                }
+            });
+        }
+
         mLayoutManager = new LinearLayoutManager(
                 getActivity(),
                 LinearLayoutManager.VERTICAL,
@@ -70,6 +83,12 @@ public class TimelineFragment extends Fragment implements
 
         mDrinkList = (RecyclerView) view.findViewById(R.id.timeline_drinks);
         mDrinkList.setLayoutManager(mLayoutManager);
+        mDrinkList.addItemDecoration(
+                new DividerItemDecorator(
+                        getActivity(),
+                        DividerItemDecorator.VERTICAL_LIST
+                )
+        );
 
         SwipeableRecyclerViewTouchListener swipeTouchListener =
                 new SwipeableRecyclerViewTouchListener(mDrinkList, this);
@@ -121,6 +140,7 @@ public class TimelineFragment extends Fragment implements
 
             Log.d(TAG, "SwipeRight: pos: " + position);
 
+            DrinkHistoryDatabase.deleteDrink(getActivity(), mDrinks.get(position));
             mDrinkListAdapter.removeAt(position);
         }
     }
@@ -133,6 +153,7 @@ public class TimelineFragment extends Fragment implements
 
             Log.d(TAG, "SwipeLeft: pos: " + position);
 
+            DrinkHistoryDatabase.deleteDrink(getActivity(), mDrinks.get(position));
             mDrinkListAdapter.removeAt(position);
         }
     }

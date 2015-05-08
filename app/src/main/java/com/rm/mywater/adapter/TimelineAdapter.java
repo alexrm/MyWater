@@ -1,5 +1,6 @@
-package com.rm.mywater;
+package com.rm.mywater.adapter;
 
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rm.mywater.R;
 import com.rm.mywater.model.Drink;
 import com.rm.mywater.util.DrinkUtil;
 import com.rm.mywater.util.TimeUtil;
@@ -42,9 +44,15 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
 
         Drink drink = mDrinks.get(position);
 
-        // TODO icon getter
+        viewHolder.mIcon
+                .getDrawable()
+                .mutate()
+                .setColorFilter(
+                        DrinkUtil.getPieColor(drink.getType()),
+                        PorterDuff.Mode.MULTIPLY
+                );
 
-        viewHolder.mVolume.setText(DrinkUtil.getOz(drink.getVolume()) + " унц");
+        viewHolder.mVolume.setText(drink.getVolume() + " мл");
         viewHolder.mTime.setText(TimeUtil.getTime(drink.getTime()));
         viewHolder.mTitle.setText(DrinkUtil.getTitle(drink.getType()));
     }
@@ -59,11 +67,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         mDrinks.remove(position);
         notifyItemRemoved(position);
         notifyDataSetChanged();
-    }
-
-    public interface OnItemClickListener {
-
-        public void onItemClick(int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
