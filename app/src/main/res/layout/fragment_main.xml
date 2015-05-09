@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         wave:above_wave_color="@color/color_accent_dark"
         wave:blow_wave_color="@color/color_accent_dark"
-        wave:progress="30"
+        wave:progress="50"
         wave:wave_height="large"
         wave:wave_hz="slow"
         wave:wave_length="large"/>

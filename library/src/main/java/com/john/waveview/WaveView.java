@@ -76,7 +76,7 @@ public class WaveView extends LinearLayout {
     }
 
     private void computeWaveToTop() {
-        mWaveToTop = (int) (getHeight() * (1f - mProgress / 100f));
+        mWaveToTop = (int) (getHeight() * (1f - mProgress / 100f) + 3);
         ViewGroup.LayoutParams params = mWave.getLayoutParams();
         if (params != null) {
             ((LayoutParams) params).topMargin = mWaveToTop;

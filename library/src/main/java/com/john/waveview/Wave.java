@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 
 // y=Asin(ωx+φ)+k
 class Wave extends View {
-    private final int WAVE_HEIGHT_LARGE = 16;
+    private final int WAVE_HEIGHT_LARGE = 36;
     private final int WAVE_HEIGHT_MIDDLE = 8;
     private final int WAVE_HEIGHT_LITTLE = 5;
 
     private final float WAVE_LENGTH_MULTIPLE_LARGE = 1.5f;
-    private final float WAVE_LENGTH_MULTIPLE_MIDDLE = 1f;
+    private final float WAVE_LENGTH_MULTIPLE_MIDDLE = 0.8f;
     private final float WAVE_LENGTH_MULTIPLE_LITTLE = 0.5f;
 
     private final float WAVE_HZ_FAST = 0.13f;
@@ -23,12 +23,12 @@ class Wave extends View {
     private final float WAVE_HZ_SLOW = 0.05f;
 
     public final int DEFAULT_ABOVE_WAVE_ALPHA = 50;
-    public final int DEFAULT_BLOW_WAVE_ALPHA = 30;
+    public final int DEFAULT_BLOW_WAVE_ALPHA = 255;
 
     private final float X_SPACE = 20;
     private final double PI2 = 2 * Math.PI;
 
-    private Path mAboveWavePath = new Path();
+//    private Path mAboveWavePath = new Path();
     private Path mBlowWavePath = new Path();
 
     private Paint mAboveWavePaint = new Paint();
@@ -66,7 +66,7 @@ class Wave extends View {
         super.onDraw(canvas);
 
         canvas.drawPath(mBlowWavePath, mBlowWavePaint);
-        canvas.drawPath(mAboveWavePath, mAboveWavePaint);
+//        canvas.drawPath(mAboveWavePath, mAboveWavePaint);
     }
 
     public void setAboveWaveColor(int aboveWaveColor) {
@@ -147,18 +147,18 @@ class Wave extends View {
      * calculate wave track
      */
     private void calculatePath() {
-        mAboveWavePath.reset();
+//        mAboveWavePath.reset();
         mBlowWavePath.reset();
 
         getWaveOffset();
 
         float y;
-        mAboveWavePath.moveTo(left, bottom);
-        for (float x = 0; x <= mMaxRight; x += X_SPACE) {
-            y = (float) (mWaveHeight * Math.sin(omega * x + mAboveOffset) + mWaveHeight);
-            mAboveWavePath.lineTo(x, y);
-        }
-        mAboveWavePath.lineTo(right, bottom);
+//        mAboveWavePath.moveTo(left, bottom);
+//        for (float x = 0; x <= mMaxRight; x += X_SPACE) {
+//            y = (float) (mWaveHeight * Math.sin(omega * x + mAboveOffset) + mWaveHeight);
+//            mAboveWavePath.lineTo(x, y);
+//        }
+//        mAboveWavePath.lineTo(right, bottom);
 
         mBlowWavePath.moveTo(left, bottom);
         for (float x = 0; x <= mMaxRight; x += X_SPACE) {
