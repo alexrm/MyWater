@@ -28,6 +28,7 @@ public class WaveView extends LinearLayout {
 
     private Wave mWave;
     private Solid mSolid;
+    private LinearLayout.LayoutParams mSolidParams;
 
     private final int DEFAULT_ABOVE_WAVE_COLOR = Color.WHITE;
     private final int DEFAULT_BLOW_WAVE_COLOR = Color.WHITE;
@@ -56,6 +57,8 @@ public class WaveView extends LinearLayout {
         mSolid.setAboveWavePaint(mWave.getAboveWavePaint());
         mSolid.setBlowWavePaint(mWave.getBlowWavePaint());
 
+        mSolidParams = (LinearLayout.LayoutParams) mSolid.getLayoutParams();
+
         addView(mWave);
         addView(mSolid);
 
@@ -63,7 +66,7 @@ public class WaveView extends LinearLayout {
     }
 
     public void setProgress(int progress) {
-        this.mProgress = progress > 100 ? 100 : progress;
+        this.mProgress = progress > 100 ? 100 : (progress > 0) ? progress : 1;
         computeWaveToTop();
     }
 
@@ -76,12 +79,39 @@ public class WaveView extends LinearLayout {
     }
 
     private void computeWaveToTop() {
-        mWaveToTop = (int) (getHeight() * (1f - mProgress / 100f) + 3);
-        ViewGroup.LayoutParams params = mWave.getLayoutParams();
-        if (params != null) {
-            ((LayoutParams) params).topMargin = mWaveToTop;
+
+        if (mProgress == 100) {
+
+            mWave.setVisibility(GONE);
+
+            if (mSolidParams != null) {
+
+                mSolidParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
+                mSolidParams.weight = 0;
+                mSolid.setLayoutParams(mSolidParams);
+            }
+
+        } else {
+
+            if (mSolidParams != null) {
+
+                mSolidParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                mSolidParams.weight = 1;
+                mSolid.setLayoutParams(mSolidParams);
+            }
+
+            mWave.setVisibility(VISIBLE);
+            mWaveToTop = (int) (getHeight() * (1f - mProgress / 100f) + 3);
+
+            ViewGroup.LayoutParams waveParams = mWave.getLayoutParams();
+
+            if (waveParams != null) {
+
+                ((LayoutParams) waveParams).topMargin = mWaveToTop;
+            }
+
+            mWave.setLayoutParams(waveParams);
         }
-        mWave.setLayoutParams(params);
     }
 
     @Override

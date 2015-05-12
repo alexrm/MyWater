@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MyWater</string>
 
@@ -28,8 +29,12 @@
     <string name="notifications_send_from_placeholder">09:00</string>
     <string name="notifications_send_from_title">Со скольки</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="main_data_volume">%1$.1f %2$s из %3$.1f %2$s</string>
+    <string name="main_data_percent">%1$d%2$s</string>
+    <string name="main_message_default">Привет! Ты за\n сегодня выпил</string>
+    <string name="chooser_drinks_title">Выбери напиток</string>
+
+    <!--<string name="cd_main_add_drink">Add drink button</string>-->
 
 
 </resources>

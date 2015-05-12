@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/main_text_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:gravity="center_horizontal"
+        android:textSize="21sp"
+        android:textColor="@color/color_main_element"
+        android:text="@string/main_message_default"/>
+
+    <TextView
+        android:id="@+id/main_text_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:textSize="60sp"
+        android:textColor="@color/color_main_element"
+        android:text="@string/main_data_percent"/>
+
+    <TextView
+        android:id="@+id/main_text_volume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:textSize="16sp"
+        android:textColor="@color/color_main_element"
+        android:text="@string/main_data_volume"/>
+
+    <ImageView
+        android:id="@+id/main_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:background="@drawable/background_main_elements"
+        android:src="@drawable/icon_add_drink"/>
+
+</LinearLayout>

@@ -2,15 +2,13 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/window_background"
-              tools:context="com.rm.mywater.ui.DaysFragment">
+              android:background="@color/color_window_background"
+              tools:context="com.rm.mywater.ui.stats.DaysFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/days_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:fadeScrollbars="true"
         />
 
 </LinearLayout>

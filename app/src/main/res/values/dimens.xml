@@ -2,4 +2,9 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="dialog_choose_drink_dialog_height">500dp</dimen>
+    <dimen name="dialog_y_up">450dp</dimen>
+    <dimen name="dialog_y_down">500dp</dimen>
+
 </resources>

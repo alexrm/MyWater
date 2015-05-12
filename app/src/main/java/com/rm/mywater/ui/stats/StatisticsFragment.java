@@ -1,4 +1,4 @@
-package com.rm.mywater.ui;
+package com.rm.mywater.ui.stats;
 
 
 import android.graphics.Color;

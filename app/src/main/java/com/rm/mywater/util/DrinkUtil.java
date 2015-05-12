@@ -69,13 +69,13 @@ public final class DrinkUtil {
 
             case Drink.SODA: return "Газировка";
 
-            case Drink.OTHER: return "Другой напиток";
+            case Drink.OTHER: return "Другое";
 
-            default: return "Другой напиток";
+            default: return "Другое";
         }
     }
 
-    public static int getPieColor(int type) {
+    public static int getDrinkColor(int type) {
 
         switch (type) {
 
@@ -99,12 +99,5 @@ public final class DrinkUtil {
 
             default: return Color.parseColor("#d9d9d9");
         }
-    }
-
-    public static int getDrinkIcon(int type) {
-
-        // TODO implement this
-
-        return -1;
     }
 }

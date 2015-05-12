@@ -15,12 +15,12 @@ class Wave extends View {
     private final int WAVE_HEIGHT_LITTLE = 5;
 
     private final float WAVE_LENGTH_MULTIPLE_LARGE = 1.5f;
-    private final float WAVE_LENGTH_MULTIPLE_MIDDLE = 0.8f;
+    private final float WAVE_LENGTH_MULTIPLE_MIDDLE = 1.2f;
     private final float WAVE_LENGTH_MULTIPLE_LITTLE = 0.5f;
 
     private final float WAVE_HZ_FAST = 0.13f;
     private final float WAVE_HZ_NORMAL = 0.09f;
-    private final float WAVE_HZ_SLOW = 0.05f;
+    private final float WAVE_HZ_SLOW = 0.04f;
 
     public final int DEFAULT_ABOVE_WAVE_ALPHA = 50;
     public final int DEFAULT_BLOW_WAVE_ALPHA = 255;
@@ -122,7 +122,7 @@ class Wave extends View {
     private int getWaveHeight(int size) {
         switch (size) {
             case WaveView.LARGE:
-                return WAVE_HEIGHT_LARGE;
+                return getResources().getDimensionPixelSize(R.dimen.wave_height);
             case WaveView.MIDDLE:
                 return WAVE_HEIGHT_MIDDLE;
             case WaveView.LITTLE:
@@ -227,7 +227,6 @@ class Wave extends View {
                 long start = System.currentTimeMillis();
 
                 calculatePath();
-
                 invalidate();
 
                 long gap = 16 - (System.currentTimeMillis() - start);

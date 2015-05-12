@@ -2,13 +2,18 @@
 <resources>
     <item name="color_primary" type="color">#34aedd</item>
     <item name="color_primary_dark" type="color">#2c94bc</item>
-    <item name="window_background" type="color">#e2f2f8</item>
+    <item name="color_window_background" type="color">#e2f2f8</item>
     <item name="color_accent" type="color">#34aedd</item>
     <item name="color_accent_dark" type="color">#2c94bc</item>
     <item name="color_activated_highlight" type="color">#c4d5db</item>
     <item name="color_white" type="color">#fff</item>
     <item name="color_settings_title" type="color">#9ca4a7</item>
+    <item name="color_main_element" type="color">#274e60</item>
+    <item name="color_chooser_dialog_text" type="color">#093e59</item>
 
+    <!--Probably fab is a horrible decision -->
+    <!--<item name="color_fab_background_normal" type="color">#c5eef8</item>-->
+    <!--<item name="color_fab_background_pressed" type="color">#a6ced7</item>-->
 
 
     <!--TODO These attrs are here for nav drawer-->

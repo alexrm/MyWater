@@ -48,7 +48,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
                 .getDrawable()
                 .mutate()
                 .setColorFilter(
-                        DrinkUtil.getPieColor(drink.getType()),
+                        DrinkUtil.getDrinkColor(drink.getType()),
                         PorterDuff.Mode.MULTIPLY
                 );
 

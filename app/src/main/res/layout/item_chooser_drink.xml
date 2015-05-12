@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:layout_margin="8dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:layout_gravity="center_horizontal">
+
+    <ImageView
+        android:id="@+id/chooser_drink_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/drink_icon"
+        android:layout_centerHorizontal="true"
+        tools:ignore="ContentDescription"/>
+
+    <TextView
+        android:id="@+id/chooser_drink_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/chooser_drink_icon"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/color_chooser_dialog_text"
+        android:text="Milk"/>
+
+</RelativeLayout>

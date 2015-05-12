@@ -1,4 +1,4 @@
-package com.rm.mywater.ui;
+package com.rm.mywater.ui.stats;
 
 
 import android.graphics.PorterDuff;
@@ -101,7 +101,7 @@ public class OverallFragment extends BaseFragment implements OnFragmentInteracti
 
             mPieChart.addPieSlice(new PieModel(
                     d.getVolume(),
-                    DrinkUtil.getPieColor(d.getType())
+                    DrinkUtil.getDrinkColor(d.getType())
             ));
         }
 
@@ -142,7 +142,7 @@ public class OverallFragment extends BaseFragment implements OnFragmentInteracti
 
             Drink drink = mOverallList.get(i);
 
-            int drinkColor = DrinkUtil.getPieColor(drink.getType());
+            int drinkColor = DrinkUtil.getDrinkColor(drink.getType());
 
             Log.d("Implementor", "onBindViewHolder - drinkColor: "
                     + drinkColor);
