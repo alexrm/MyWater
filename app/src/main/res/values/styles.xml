@@ -2,7 +2,6 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-        <item name="android:windowBackground">@color/color_window_background</item>
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorAccent">@color/color_accent</item>
 
@@ -14,6 +13,20 @@
         <item name="android:textColorPrimary">#fff</item><!-- actionbar text color -->
         <item name="android:textColorSecondary">#fff</item><!-- actionbar buttons color -->
 
+    </style>
+
+    <style name="AppTheme.BaseActivity" parent="AppTheme">
+
+        <item name="android:windowAnimationStyle">@style/AppTheme.ActivityTransition</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.ActivityTransition" parent="@android:style/Animation.Activity">
+
+        <item name="android:activityOpenEnterAnimation">@anim/content_from_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/content_support_anim</item>
+        <item name="android:activityCloseExitAnimation">@anim/content_to_right</item>
+        <item name="android:activityCloseEnterAnimation">@anim/content_support_anim</item>
     </style>
 
     <style name="actionbar_popup" parent="ThemeOverlay.AppCompat.Light"/>
@@ -42,6 +55,10 @@
 
         <item name="android:listPreferredItemPaddingLeft">0dip</item>
         <item name="android:listPreferredItemPaddingRight">0dip</item>
+    </style>
+
+    <style name="AppTheme.ChooseDrinkDialog.Seek">
+        <item name="colorControlActivated">@color/color_main_element</item>
     </style>
 
 </resources>

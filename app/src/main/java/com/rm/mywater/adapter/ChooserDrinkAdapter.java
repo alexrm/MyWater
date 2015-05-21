@@ -1,5 +1,6 @@
 package com.rm.mywater.adapter;
 
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.rm.mywater.model.Drink;
 import com.rm.mywater.util.DrinkUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by alex
@@ -24,18 +26,8 @@ public class ChooserDrinkAdapter extends RecyclerView.Adapter<ChooserDrinkAdapte
     }
 
     private OnItemClickListener mListener;
-    private ArrayList<Integer> mDrinkTypeList = new ArrayList<Integer>() {{
-
-        add(Drink.WATER);
-        add(Drink.TEA);
-        add(Drink.COFFEE);
-        add(Drink.MILK);
-        add(Drink.SODA);
-        add(Drink.ALCOHOL);
-        add(Drink.JUICE);
-        add(Drink.ENERGY);
-        add(Drink.OTHER);
-    }};
+    private ArrayList<Integer> mDrinkTypeList
+            = new ArrayList<>(Arrays.asList(Drink.DRINK_TYPES));
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -62,8 +54,11 @@ public class ChooserDrinkAdapter extends RecyclerView.Adapter<ChooserDrinkAdapte
         );
 
         holder.mDrinkIcon.setColorFilter(
-                DrinkUtil.getDrinkColor(drinkType)
+                DrinkUtil.getDrinkColor(drinkType),
+                PorterDuff.Mode.MULTIPLY
         );
+
+        holder.mDrinkType = mDrinkTypeList.get(position);
     }
 
     @Override
@@ -81,6 +76,7 @@ public class ChooserDrinkAdapter extends RecyclerView.Adapter<ChooserDrinkAdapte
 
         public TextView mDrinkTitle;
         public ImageView mDrinkIcon;
+        public int mDrinkType;
 
         private OnItemClickListener mClickListener;
 
@@ -97,7 +93,7 @@ public class ChooserDrinkAdapter extends RecyclerView.Adapter<ChooserDrinkAdapte
         public void onClick(View v) {
 
             if (mClickListener != null)
-                this.mClickListener.onItemClick(v, getPosition());
+                this.mClickListener.onItemClick(mDrinkType, getPosition());
         }
 
         public void setOnItemClickListener(OnItemClickListener listener) {

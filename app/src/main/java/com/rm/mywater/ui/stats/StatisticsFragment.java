@@ -44,18 +44,6 @@ public class StatisticsFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (mToolbar != null) {
-            mToolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back);
-
-            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        }
-
         mViewPager      = (ViewPager)        view.findViewById(R.id.timeline_pager);
         mFriendsTabs    = (SlidingTabLayout) view.findViewById(R.id.timeline_tabs);
 
@@ -66,7 +54,8 @@ public class StatisticsFragment extends BaseFragment {
         mFriendsTabs.setSelectedIndicatorColors(Color.WHITE);
     }
 
-    private class TabPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
+    private class TabPagerAdapter extends FragmentStatePagerAdapter
+            implements ViewPager.OnPageChangeListener {
 
         public TabPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -109,7 +98,9 @@ public class StatisticsFragment extends BaseFragment {
         }
 
         @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        public void onPageScrolled(int position,
+                                   float positionOffset,
+                                   int positionOffsetPixels) {
 
         }
 

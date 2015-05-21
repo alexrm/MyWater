@@ -1,12 +1,11 @@
 package com.rm.mywater;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.rm.mywater.model.Day;
 import com.rm.mywater.ui.main.MainFragment;
-import com.rm.mywater.ui.TimelineFragment;
 import com.rm.mywater.util.base.BaseActivity;
 
 
@@ -17,7 +16,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_base);
 
 //        for (int i = 0; i < 20; i++) {
 //
@@ -32,6 +31,9 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
 
 //        ArrayList<Day> days = DrinkHistoryDatabase.retrieveDays(this);
 
+//        Prefs.clear();
+//        DrinkHistoryDatabase.clearTables(this);
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, new MainFragment()).commit();
 
@@ -43,7 +45,6 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -63,11 +64,10 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     @Override
     public void onFragmentAction(Object data, int key) {
 
-        // TODO implement switch-case for key
+        Intent newActivityIntent = new Intent(this, ContentActivity.class);
+        newActivityIntent.putExtra(ContentActivity.KEY_FRAGMENT_EXTRA, key);
+        newActivityIntent.putExtra(ContentActivity.KEY_TITLE_EXTRA, key);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, TimelineFragment.newInstance((Day) data))
-                .addToBackStack(null)
-                .commit();
+        startActivity(newActivityIntent);
     }
 }

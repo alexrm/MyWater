@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rm.mywater.R;
+import com.rm.mywater.util.base.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NotificationsFragment extends Fragment {
+public class NotificationsFragment extends BaseFragment {
 
 
     public NotificationsFragment() {

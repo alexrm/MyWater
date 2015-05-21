@@ -54,7 +54,7 @@
             android:id="@+id/day_achievement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/abc_ic_menu_share_mtrl_alpha"
+            android:src="@drawable/ic_achievement"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

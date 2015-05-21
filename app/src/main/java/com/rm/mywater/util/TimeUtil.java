@@ -3,7 +3,10 @@ package com.rm.mywater.util;
 import android.content.Context;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by alex on 12/04/15.
@@ -23,9 +26,11 @@ public final class TimeUtil {
         return System.currentTimeMillis()/1000;
     }
 
-    public static long getToday() {
+    public static long getStartOfTheDay(long time) {
 
+        // TODO fix locale
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time*1000);
 
         int year    = calendar.get(Calendar.YEAR);
         int month   = calendar.get(Calendar.MONTH);
@@ -42,18 +47,36 @@ public final class TimeUtil {
 
     public static String getTime(long unix) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(unix * 1000);
+        SimpleDateFormat dateFormat = (SimpleDateFormat) SimpleDateFormat.getInstance();
+        Date d = new Date();
+        String resDate;
 
-        return String.format("%tR", calendar);
+        d.setTime(unix * 1000);
+        dateFormat.applyPattern("h:mm");
+
+        resDate = dateFormat.format(d);
+
+        Log.d("TimeUtil", "getTime - resDate: "
+                + resDate);
+
+        return resDate;
     }
 
     public static String getDay(long unix) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(unix * 1000);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM", new Locale("ru", "RU"));
+        Date d = new Date();
+        String resDate;
 
-        return String.format("%te %tB", calendar, calendar);
+        d.setTime(unix * 1000);
+        dateFormat.applyPattern("d MMMM");
+
+        resDate = dateFormat.format(d);
+
+        Log.d("TimeUtil", "getDay - resDate: "
+                + resDate);
+
+        return resDate;
     }
 
     public static boolean isNotificationTime() {

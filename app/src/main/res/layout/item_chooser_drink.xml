@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/selectableItemBackgroundBorderless"
+    android:background="?attr/selectableItemBackground"
     android:layout_margin="8dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
@@ -17,7 +17,7 @@
         android:id="@+id/chooser_drink_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/drink_icon"
+        android:src="@drawable/icon_drink"
         android:layout_centerHorizontal="true"
         tools:ignore="ContentDescription"/>
 
@@ -28,7 +28,7 @@
         android:layout_marginTop="16dp"
         android:layout_below="@id/chooser_drink_icon"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/color_chooser_dialog_text"
+        android:textColor="@color/color_main_element"
         android:text="Milk"/>
 
 </RelativeLayout>

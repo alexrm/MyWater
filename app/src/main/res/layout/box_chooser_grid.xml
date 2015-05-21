@@ -23,7 +23,7 @@
             android:layout_centerInParent="true"
             android:gravity="center_vertical"
             android:text="@string/chooser_drinks_title"
-            android:textColor="@color/color_chooser_dialog_text"
+            android:textColor="@color/color_main_element"
             android:textSize="18sp"/>
 
         <ImageView
@@ -35,7 +35,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:scaleType="centerInside"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="?attr/selectableItemBackground"
             android:src="@drawable/ic_action_navigation_close"
             tools:ignore="ContentDescription"/>
 

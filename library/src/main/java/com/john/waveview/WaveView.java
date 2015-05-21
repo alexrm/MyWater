@@ -13,11 +13,11 @@ import android.widget.LinearLayout;
  * Created by John on 2014/10/15.
  */
 public class WaveView extends LinearLayout {
+
     protected static final int LARGE = 1;
     protected static final int MIDDLE = 2;
     protected static final int LITTLE = 3;
 
-    private int mAboveWaveColor;
     private int mBlowWaveColor;
     private int mProgress;
     private int mWaveHeight;
@@ -30,7 +30,6 @@ public class WaveView extends LinearLayout {
     private Solid mSolid;
     private LinearLayout.LayoutParams mSolidParams;
 
-    private final int DEFAULT_ABOVE_WAVE_COLOR = Color.WHITE;
     private final int DEFAULT_BLOW_WAVE_COLOR = Color.WHITE;
     private final int DEFAULT_PROGRESS = 80;
 
@@ -39,7 +38,6 @@ public class WaveView extends LinearLayout {
         setOrientation(VERTICAL);
         //load styled attributes.
         final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.WaveView, R.attr.waveViewStyle, 0);
-        mAboveWaveColor = attributes.getColor(R.styleable.WaveView_above_wave_color, DEFAULT_ABOVE_WAVE_COLOR);
         mBlowWaveColor = attributes.getColor(R.styleable.WaveView_blow_wave_color, DEFAULT_BLOW_WAVE_COLOR);
         mProgress = attributes.getInt(R.styleable.WaveView_progress, DEFAULT_PROGRESS);
         mWaveHeight = attributes.getInt(R.styleable.WaveView_wave_height, MIDDLE);
@@ -49,12 +47,10 @@ public class WaveView extends LinearLayout {
 
         mWave = new Wave(context, null);
         mWave.initializeWaveSize(mWaveMultiple, mWaveHeight, mWaveHz);
-        mWave.setAboveWaveColor(mAboveWaveColor);
         mWave.setBlowWaveColor(mBlowWaveColor);
         mWave.initializePainters();
 
         mSolid = new Solid(context, null);
-        mSolid.setAboveWavePaint(mWave.getAboveWavePaint());
         mSolid.setBlowWavePaint(mWave.getBlowWavePaint());
 
         mSolidParams = (LinearLayout.LayoutParams) mSolid.getLayoutParams();

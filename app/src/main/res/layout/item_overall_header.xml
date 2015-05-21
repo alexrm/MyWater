@@ -14,6 +14,7 @@
         android:visibility="invisible"
         android:padding="16dp"
         app:egInnerValueSize="36sp"
+        app:egInnerPaddingColor="@color/color_window_background"
         />
 
 </RelativeLayout>

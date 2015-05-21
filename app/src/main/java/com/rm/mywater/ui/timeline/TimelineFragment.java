@@ -1,4 +1,4 @@
-package com.rm.mywater.ui;
+package com.rm.mywater.ui.timeline;
 
 
 import android.os.Bundle;
@@ -10,17 +10,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.rm.mywater.R;
-import com.rm.mywater.adapter.DividerItemDecorator;
 import com.rm.mywater.adapter.OnItemClickListener;
 import com.rm.mywater.adapter.TimelineAdapter;
-import com.rm.mywater.util.base.BaseFragment;
 import com.rm.mywater.database.DrinkHistoryDatabase;
 import com.rm.mywater.database.OnDataRetrievedListener;
 import com.rm.mywater.model.Day;
 import com.rm.mywater.model.Drink;
+import com.rm.mywater.util.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +37,7 @@ public class TimelineFragment extends BaseFragment implements
     private Day              mSourceDay;
     private ArrayList<Drink> mDrinks = new ArrayList<>();
 
+    private RelativeLayout mEmptyView;
     private RecyclerView mDrinkList;
     private TimelineAdapter mDrinkListAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -81,14 +82,9 @@ public class TimelineFragment extends BaseFragment implements
                 false
         );
 
+        mEmptyView = (RelativeLayout) view.findViewById(R.id.empty_box);
         mDrinkList = (RecyclerView) view.findViewById(R.id.timeline_drinks);
         mDrinkList.setLayoutManager(mLayoutManager);
-        mDrinkList.addItemDecoration(
-                new DividerItemDecorator(
-                        getActivity(),
-                        DividerItemDecorator.VERTICAL_LIST
-                )
-        );
 
         SwipeableRecyclerViewTouchListener swipeTouchListener =
                 new SwipeableRecyclerViewTouchListener(mDrinkList, this);
@@ -105,7 +101,11 @@ public class TimelineFragment extends BaseFragment implements
                         Log.d(TAG, "onDataReceived");
 
                         mDrinks = (ArrayList<Drink>) data;
-                        mDrinkListAdapter = new TimelineAdapter(mDrinks, TimelineFragment.this);
+                        mDrinkListAdapter = new TimelineAdapter(
+                                getActivity(),
+                                mDrinks,
+                                TimelineFragment.this
+                        );
 
                         mDrinkList.setAdapter(mDrinkListAdapter);
                     }
@@ -114,6 +114,9 @@ public class TimelineFragment extends BaseFragment implements
                     public void onError(String err) {
 
                         Log.w(TAG, "onError: " + err);
+
+                        mDrinkList.setVisibility(View.GONE);
+                        mEmptyView.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -140,7 +143,6 @@ public class TimelineFragment extends BaseFragment implements
 
             Log.d(TAG, "SwipeRight: pos: " + position);
 
-            DrinkHistoryDatabase.deleteDrink(getActivity(), mDrinks.get(position));
             mDrinkListAdapter.removeAt(position);
         }
     }
@@ -153,7 +155,6 @@ public class TimelineFragment extends BaseFragment implements
 
             Log.d(TAG, "SwipeLeft: pos: " + position);
 
-            DrinkHistoryDatabase.deleteDrink(getActivity(), mDrinks.get(position));
             mDrinkListAdapter.removeAt(position);
         }
     }

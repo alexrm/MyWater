@@ -7,4 +7,6 @@
     <dimen name="dialog_y_up">450dp</dimen>
     <dimen name="dialog_y_down">500dp</dimen>
 
+    <dimen name="dialog_slide_x">16dp</dimen>
+
 </resources>

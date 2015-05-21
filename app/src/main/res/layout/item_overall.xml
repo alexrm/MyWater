@@ -8,9 +8,9 @@
 
     <ImageView
         android:id="@+id/overall_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/drink_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/icon_drink"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
@@ -53,5 +53,12 @@
         android:textSize="16sp"
         android:text="16 л"
         />
+
+    <View
+        android:id="@+id/top_item_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cccc"
+        android:layout_alignParentTop="true"/>
 
 </RelativeLayout>

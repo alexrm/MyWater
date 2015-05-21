@@ -1,5 +1,6 @@
 package com.rm.mywater.adapter;
 
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rm.mywater.R;
+import com.rm.mywater.database.DrinkHistoryDatabase;
 import com.rm.mywater.model.Drink;
 import com.rm.mywater.util.DrinkUtil;
 import com.rm.mywater.util.TimeUtil;
@@ -20,11 +22,15 @@ import java.util.ArrayList;
  */
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
 
+    private Context mContext;
     private final OnItemClickListener mListener;
     private ArrayList<Drink> mDrinks = new ArrayList<>();
 
-    public TimelineAdapter(ArrayList<Drink> drinks, OnItemClickListener listener) {
+    public TimelineAdapter(Context context,
+                           ArrayList<Drink> drinks,
+                           OnItemClickListener listener) {
 
+        this.mContext = context;
         this.mDrinks = drinks;
         this.mListener = listener;
     }
@@ -55,6 +61,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         viewHolder.mVolume.setText(drink.getVolume() + " мл");
         viewHolder.mTime.setText(TimeUtil.getTime(drink.getTime()));
         viewHolder.mTitle.setText(DrinkUtil.getTitle(drink.getType()));
+
     }
 
     @Override
@@ -64,7 +71,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
 
     public void removeAt(int position) {
 
-        mDrinks.remove(position);
+        DrinkHistoryDatabase.deleteDrink(mContext, mDrinks.remove(position));
         notifyItemRemoved(position);
         notifyDataSetChanged();
     }

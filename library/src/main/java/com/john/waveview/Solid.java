@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
  */
 class Solid extends View {
 
-    private Paint aboveWavePaint;
     private Paint blowWavePaint;
 
     public Solid(Context context, AttributeSet attrs) {
@@ -33,10 +32,6 @@ class Solid extends View {
         setLayoutParams(params);
     }
 
-    public void setAboveWavePaint(Paint aboveWavePaint) {
-        this.aboveWavePaint = aboveWavePaint;
-    }
-
     public void setBlowWavePaint(Paint blowWavePaint) {
         this.blowWavePaint = blowWavePaint;
     }
@@ -45,6 +40,5 @@ class Solid extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawRect(getLeft(), 0, getRight(), getBottom(), blowWavePaint);
-        canvas.drawRect(getLeft(), 0, getRight(), getBottom(), aboveWavePaint);
     }
 }

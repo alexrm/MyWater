@@ -11,15 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.rm.mywater.MainActivity;
 import com.rm.mywater.OnFragmentInteractionListener;
 import com.rm.mywater.R;
 import com.rm.mywater.adapter.DaysAdapter;
 import com.rm.mywater.adapter.OnItemClickListener;
-import com.rm.mywater.util.base.BaseFragment;
 import com.rm.mywater.database.DrinkHistoryDatabase;
 import com.rm.mywater.database.OnDataRetrievedListener;
 import com.rm.mywater.model.Day;
+import com.rm.mywater.util.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -86,7 +85,7 @@ public class DaysFragment extends BaseFragment implements OnItemClickListener {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        setInteractionListener((MainActivity) activity);
+        setInteractionListener((OnFragmentInteractionListener) activity);
     }
 
     public void setInteractionListener(OnFragmentInteractionListener interactionListener) {
@@ -98,7 +97,10 @@ public class DaysFragment extends BaseFragment implements OnItemClickListener {
 
         if (mInteractionListener != null) {
 
-            mInteractionListener.onFragmentAction(mDaysList.get(position), 0);
+            mInteractionListener.onFragmentAction(
+                    mDaysList.get(position).getStartTime(),
+                    OnFragmentInteractionListener.KEY_OPEN_DAY
+            );
         }
     }
 }

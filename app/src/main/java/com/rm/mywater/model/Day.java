@@ -8,12 +8,14 @@ import java.util.Random;
  */
 public class Day {
 
-    private int  mPercent; // 0% - 100%
+    private int  mCurVol;
+    private int  mMaxVol;
     private long mStartTime;
 
-    public Day(int percent, long startTime) {
+    public Day(int curVol, int maxVol, long startTime) {
 
-        this.mPercent = percent;
+        this.mCurVol = curVol;
+        this.mMaxVol = maxVol;
         this.mStartTime = startTime;
     }
 
@@ -31,25 +33,34 @@ public class Day {
         c.set(Calendar.MONTH, 4);
         c.set(Calendar.DAY_OF_MONTH, r.nextInt(30));
 
-        d.setPercent(r.nextInt(100));
+        d.setCurVol(r.nextInt(1800));
+        d.setMaxVol(r.nextInt(1800));
         d.setStartTime(c.getTimeInMillis());
 
         return d;
     }
 
     //region Setters
-    public void setPercent(int percent) {
-        mPercent = percent;
-    }
 
     public void setStartTime(long startTime) {
         mStartTime = startTime;
+    }
+
+    public void setCurVol(int curVol) {
+        mCurVol = curVol;
+    }
+
+    public void setMaxVol(int maxVol) {
+        mMaxVol = maxVol;
     }
     //endregion
 
     //region Getters
     public int getPercent() {
-        return mPercent;
+
+        int percent = (int) ((float) mCurVol / mMaxVol * 100);
+
+        return percent > 100 ? 100 : percent;
     }
 
     public long getStartTime() {
@@ -60,6 +71,14 @@ public class Day {
     public long getEndTime() {
 
         return mStartTime + 3600*24;
+    }
+
+    public int getCurVol() {
+        return mCurVol;
+    }
+
+    public int getMaxVol() {
+        return mMaxVol;
     }
     //endregion
 }

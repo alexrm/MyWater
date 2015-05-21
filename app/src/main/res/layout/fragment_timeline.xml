@@ -1,8 +1,16 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.rm.mywater.ui.TimelineFragment">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_window_background"
+    tools:context="com.rm.mywater.ui.timeline.TimelineFragment">
+
+    <include
+        layout="@layout/box_empty_stub"
+        android:id="@+id/empty_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/timeline_drinks"
@@ -10,11 +18,6 @@
         android:layout_height="wrap_content"
         />
 
-    <include
-        layout="@layout/box_empty_timeline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        />
+
 
 </RelativeLayout>

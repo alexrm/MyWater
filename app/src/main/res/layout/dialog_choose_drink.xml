@@ -19,38 +19,23 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-        <include layout="@layout/box_chooser_grid"
-                 android:id="@+id/chooser_first"
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 android:layout_marginBottom="40dp"
+        <include
+            layout="@layout/box_chooser_grid"
+            android:id="@+id/chooser_first"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="40dp"
             />
 
-        <LinearLayout
-            android:id="@+id/second"
+        <include
+            layout="@layout/box_chooser_volume_picker"
+            android:id="@+id/chooser_second"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:orientation="vertical"
             android:visibility="gone"
             >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="Second page"
-                android:layout_gravity="center_horizontal|top"
-                android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-            <Button
-                android:id="@+id/back"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_gravity="center_horizontal|bottom"
-                android:text="Back"/>
-
-        </LinearLayout>
+        </include>
     </FrameLayout>
 
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="volume_spinner_euro">
+
+        <item>30 мл (Эспрессо)</item>
+        <item>50 мл (Рюмка)</item>
+        <item>100 мл</item>
+        <item>150 мл</item>
+        <item>200 мл (Чашка)</item>
+        <item>250 мл (Стакан)</item>
+        <item>300 мл</item>
+        <item>500 мл</item>
+        <item>1000 мл (Литр)</item>
+    </string-array>
+
+</resources>

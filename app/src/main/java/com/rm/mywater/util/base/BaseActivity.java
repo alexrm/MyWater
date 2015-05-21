@@ -17,7 +17,7 @@ import com.rm.mywater.util.TimeUtil;
  */
 public class BaseActivity extends ActionBarActivity {
 
-    private Toolbar toolbar;
+    protected Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class BaseActivity extends ActionBarActivity {
 
         long savedToday = Prefs.getSavedToday();
 
-        if (savedToday != TimeUtil.getToday()) {
+        if (savedToday != TimeUtil.getStartOfTheDay(TimeUtil.unixTime())) {
 
             Log.d("SavedToday", "Today = " + savedToday);
 
@@ -34,20 +34,18 @@ public class BaseActivity extends ActionBarActivity {
             DrinkHistoryDatabase.addDay(
                     this,
                     new Day(
-                            Prefs.getPercent(),
-                            TimeUtil.getToday()
+                            Prefs.getCurrentVol(),
+                            Prefs.getBaseVol(),
+                            TimeUtil.getStartOfTheDay(TimeUtil.unixTime())
                     )
             );
 
             Prefs.saveToday();
 
-            Prefs.put(Prefs.KEY_DB_DAY_EXISTS, true);
-
         } else {
 
             Log.d("SavedToday", "Today == Saved");
 
-            Prefs.put(Prefs.KEY_DB_DAY_EXISTS, true);
         }
     }
 
@@ -55,20 +53,20 @@ public class BaseActivity extends ActionBarActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        if (toolbar != null) {
+        if (mToolbar != null) {
 
-            setSupportActionBar(toolbar);
+            setSupportActionBar(mToolbar);
 
             int paddingTop = Dimen.getStatusBarHeight();
 
-//            toolbar.setTitleTextColor(getResources().getColor(R.color.color_white));
-            toolbar.setPadding(0, paddingTop, 0, 0);
+//            mToolbar.setTitleTextColor(getResources().getColor(R.color.color_white));
+            mToolbar.setPadding(0, paddingTop, 0, 0);
         }
     }
 
     public Toolbar getToolbar() {
-        return toolbar;
+        return mToolbar;
     }
 }

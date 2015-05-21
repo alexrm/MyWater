@@ -1,8 +1,10 @@
 package com.rm.mywater.ui.main;
 
 
-import android.os.Bundle;
+import android.app.Activity;
 import android.app.Fragment;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +12,40 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.john.waveview.WaveView;
+import com.rm.mywater.MainActivity;
+import com.rm.mywater.OnFragmentInteractionListener;
 import com.rm.mywater.R;
+import com.rm.mywater.database.DrinkHistoryDatabase;
+import com.rm.mywater.database.OnDataUpdatedListener;
+import com.rm.mywater.model.Drink;
+import com.rm.mywater.util.Prefs;
 import com.rm.mywater.util.base.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends BaseFragment {
+public class MainFragment extends BaseFragment
+        implements
+        OnDrinkChosenListener,
+        OnDataUpdatedListener {
 
-    int mProgress = 50;
-    WaveView mWave;
-    TextView mPercent;
+    private OnFragmentInteractionListener mInterationListener;
+
+    // data
+    private int mPercentProgress;
+    private float mCurrentVolume;
+    private float mCurrentMaximum;
+
+    // data views
+    private WaveView mWave;
+    private TextView mPercent;
+    private TextView mVolume;
+
+    // action views
+    private ImageView mAddButton;
+    private ImageView mStatButton;
+    private ImageView mNotifyButton;
+    private ImageView mSettingsButton;
 
     public MainFragment() {
         // Required empty public constructor
@@ -39,20 +64,59 @@ public class MainFragment extends BaseFragment {
 
         if (mToolbar != null) mToolbar.setVisibility(View.GONE);
 
+        DrinkHistoryDatabase.setUpdateListener(this);
+
         mWave = (WaveView) view.findViewById(R.id.wave_view);
-
         mPercent = (TextView) view.findViewById(R.id.main_text_percent);
-        mPercent.setText(getString(R.string.main_data_percent, mProgress, "%"));
+        mVolume = (TextView) view.findViewById(R.id.main_text_volume);
 
-        TextView volume = (TextView) view.findViewById(R.id.main_text_volume);
-        volume.setText(getString(R.string.main_data_volume, 2.24F, "л", 4.44F));
+        updateData();
 
-        ImageView add = (ImageView) view.findViewById(R.id.main_add);
-        add.setOnClickListener(new View.OnClickListener() {
+        mAddButton = (ImageView) view.findViewById(R.id.main_add);
+        mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 showChooserDialog();
+            }
+        });
+
+        mStatButton = (ImageView) view.findViewById(R.id.main_stats);
+        mStatButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                mInterationListener.onFragmentAction(
+                        null,
+                        OnFragmentInteractionListener.KEY_OPEN_STATS
+                );
+            }
+        });
+
+        mNotifyButton = (ImageView) view.findViewById(R.id.main_notify);
+        mNotifyButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                mInterationListener.onFragmentAction(
+                        null,
+                        OnFragmentInteractionListener.KEY_OPEN_NOTIFY
+                );
+            }
+        });
+
+        mSettingsButton = (ImageView) view.findViewById(R.id.main_settings);
+        mSettingsButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                mInterationListener.onFragmentAction(
+                        null,
+                        OnFragmentInteractionListener.KEY_OPEN_SETTINGS
+                );
             }
         });
     }
@@ -60,7 +124,55 @@ public class MainFragment extends BaseFragment {
     private void showChooserDialog() {
 
         ChooseDrinkDialog chooseDrinkDialog = new ChooseDrinkDialog(getActivity());
-
+        chooseDrinkDialog.setOnDrinkChosenListener(this);
         chooseDrinkDialog.show();
+    }
+
+    private void updateData() {
+
+        mCurrentVolume = Prefs.getCurrentVol();
+        mCurrentMaximum = Prefs.getCurrentMax();
+
+        Log.d("MainFragment", "updateData - mCurrentVolume: "
+                + mCurrentVolume);
+
+        Log.d("MainFragment", "updateData - mCurrentMaximum: "
+                + mCurrentMaximum);
+
+        mPercentProgress = (int) ((mCurrentVolume / mCurrentMaximum) * 100);
+        if (mPercentProgress > 100) mPercentProgress = 100;
+
+        Log.d("MainFragment", "updateData - mPercentProgress: "
+                + mPercentProgress);
+
+        mWave.setProgress(mPercentProgress);
+        mPercent.setText(getString(R.string.main_data_percent, mPercentProgress, "%"));
+
+        mVolume.setText(
+                getString(R.string.main_data_volume,
+                        mCurrentVolume / 1000,
+                        "л", // TODO add oz support
+                        mCurrentMaximum / 1000
+                )
+        );
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        mInterationListener = (MainActivity) activity;
+    }
+
+    @Override
+    public void onChose(Drink d) {
+
+        DrinkHistoryDatabase.addDrink(getActivity(), d);
+    }
+
+    @Override
+    public void onUpdate() {
+
+        updateData();
     }
 }

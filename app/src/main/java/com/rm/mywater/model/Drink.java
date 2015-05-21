@@ -21,6 +21,13 @@ public class Drink {
     public static final int JUICE       = 7;
     public static final int ENERGY      = 8;
     public static final int OTHER       = 9;
+
+    public static final Integer[] DRINK_TYPES = new Integer[] {
+
+            WATER, TEA, COFFEE,
+            MILK, SODA, ALCOHOL,
+            JUICE, ENERGY, OTHER
+    };
     //endregion
 
     //region Coefficients
@@ -38,10 +45,10 @@ public class Drink {
     private float mCoefficient;
 
     private int         mType;
-    private float       mVolume;
+    private int         mVolume;
     private long        mTime; // unix time
 
-    public Drink(int type, float volume) {
+    public Drink(int type, int volume) {
 
         setType(type);
         setVolume(volume);
@@ -69,7 +76,7 @@ public class Drink {
         return mType;
     }
 
-    public float getVolume() {
+    public int getVolume() {
         return mVolume;
     }
 
@@ -83,7 +90,7 @@ public class Drink {
     //endregion
 
     //region Setters
-    public void setVolume(float volume) {
+    public void setVolume(int volume) {
         mVolume = volume;
     }
 

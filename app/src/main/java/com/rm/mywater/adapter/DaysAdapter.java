@@ -26,13 +26,13 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.ViewHolder> {
     private ArrayList<Day> mDaysList = new ArrayList<>();
 
     public DaysAdapter(ArrayList<Day> daysList, OnItemClickListener itemClickListener) {
+//
+//        for (int i = 0; i < 25; i++) {
+//
+//            mDaysList.add(Day.getDummy());
+//        }
 
-        for (int i = 0; i < 20; i++) {
-
-            mDaysList.add(Day.getDummy());
-        }
-
-//        mDaysList = daysList;
+        mDaysList = daysList;
         mItemClickListener = itemClickListener;
     }
 
@@ -54,6 +54,7 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.ViewHolder> {
         Day current = getItem(position);
 
         int percent = getItem(position).getPercent();
+
         int valueTo = Math.round(255 * ((float) percent / 100));
 
         int textColor = (percent > 50) ?
@@ -68,6 +69,11 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.ViewHolder> {
 
         holder.mVolumeProgress.setProgress(percent);
         holder.mVolumeProgress.getProgressDrawable().setAlpha(valueTo);
+
+        if (percent == 100) {
+
+            holder.mAchievement.setVisibility(View.VISIBLE);
+        }
 
     }
 

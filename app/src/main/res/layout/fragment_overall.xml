@@ -3,12 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rm.mywater.ui.stats.OverallFragment">
+    tools:context="com.rm.mywater.ui.stats.OverallFragment"
+    android:background="@color/color_window_background">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/overall_drinks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/color_window_background"
+        />
+
+    <include
+        layout="@layout/box_empty_stub"
+        android:id="@+id/empty_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
         />
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.rm.mywater.model.Day;
 import com.rm.mywater.model.Drink;
+import com.rm.mywater.util.Prefs;
 import com.rm.mywater.util.TimeUtil;
 
 import java.util.ArrayList;
@@ -24,11 +25,14 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "water_data";
 
-    //region Days table
-    private static final String DAYS_TABLE      = "days";
+    private static OnDataUpdatedListener sUpdateListener;
 
-    private static final String COL_START_TIME  = "start_time";
-    private static final String COL_PERCENT     = "percent";
+    //region Days table
+    private static final String DAYS_TABLE          = "days";
+
+    private static final String COL_START_TIME      = "start_time";
+    private static final String COL_MAX_VOLUME      = "max_vol";
+    private static final String COL_CUR_VOLUME      = "cur_vol";
     //endregion
 
     //region Timeline table
@@ -38,13 +42,19 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
     private static final String COL_VOLUME = "volume";
     //endregion
 
+    // region Support columns
+    public static final String COL_OVERALL = "overall_volume";
+    public static final String COL_SYNCABLE_VOLUME = "sync_vol";
+    // endregion
+
     //region Create table commands
     private static final String DAYS_TABLE_CREATE =
             "create table " +
                     DAYS_TABLE +
                     " ( " +
                     COL_START_TIME   + " INTEGER PRIMARY KEY," +
-                    COL_PERCENT      + " INTEGER NOT NULL" +
+                    COL_CUR_VOLUME   + " INTEGER NOT NULL, " +
+                    COL_MAX_VOLUME   + " INTEGER NOT NULL" +
                     " ) ";
 
     private static final String TIMELINE_TABLE_CREATE =
@@ -53,12 +63,16 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
                     " ( " +
                     COL_TIME        + " INTEGER PRIMARY KEY," +
                     COL_DRINK_ID    + " INTEGER NOT NULL," +
-                    COL_VOLUME      + " FLOAT NOT NULL" +
+                    COL_VOLUME      + " INTEGER NOT NULL" +
                     " ) ";
     //endregion
 
     public DrinkHistoryDatabase(Context context) {
         super(context, DATABASE_NAME, null, 1);
+    }
+
+    public static void setUpdateListener(OnDataUpdatedListener updateListener) {
+        sUpdateListener = updateListener;
     }
 
     @Override
@@ -74,8 +88,9 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
     //region Main getters
-    public static void retrieveTimeline(Context context, Day day,
-                                        OnDataRetrievedListener listener) {
+    public static synchronized void retrieveTimeline(Context context,
+                                                     Day day,
+                                                     OnDataRetrievedListener listener) {
 
         if (day == null) {
 
@@ -107,12 +122,20 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
                 drink.setType(cursor.getInt(cursor.getColumnIndex(COL_DRINK_ID)));
                 drink.setTime(cursor.getLong(cursor.getColumnIndex(COL_TIME)));
-                drink.setVolume(cursor.getFloat(cursor.getColumnIndex(COL_VOLUME)));
+                drink.setVolume(cursor.getInt(cursor.getColumnIndex(COL_VOLUME)));
 
                 drinks.add(drink);
 
             } while (cursor.moveToNext());
 
+        } else {
+
+            cursor.close();
+            db.close();
+
+            listener.onError("Database error, cannot load timeline");
+
+            return;
         }
 
         cursor.close();
@@ -125,9 +148,9 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
         listener.onDataReceived(drinks);
     }
 
-    // should return even empty days
-    public static void retrieveDays(Context context,
-                                    OnDataRetrievedListener listener) {
+    // should return empty days
+    public static synchronized void retrieveDays(Context context,
+                                                 OnDataRetrievedListener listener) {
 
         SQLiteDatabase  db      = new DrinkHistoryDatabase(context).getReadableDatabase();
         ArrayList<Day>  rawDays = new ArrayList<>();
@@ -144,16 +167,15 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
             do {
 
-                int percent = cursor.getInt(cursor.getColumnIndex(COL_PERCENT));
                 long startTime = cursor.getInt(cursor.getColumnIndex(COL_START_TIME));
-
-                Log.d(TAG, "Getting day: Time - "    + startTime
-                                     + " Percent - " + percent);
+                int curVol = cursor.getInt(cursor.getColumnIndex(COL_CUR_VOLUME));
+                int maxVol = cursor.getInt(cursor.getColumnIndex(COL_MAX_VOLUME));
 
                 Day day = new Day();
 
-                day.setPercent(percent);
                 day.setStartTime(startTime);
+                day.setCurVol(curVol);
+                day.setMaxVol(maxVol);
 
                 rawDays.add(day);
 
@@ -181,6 +203,49 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
         listener.onDataReceived(days);
     }
+
+    public static synchronized void retrieveOverall(Context context,
+                                                    OnDataRetrievedListener listener) {
+
+        SQLiteDatabase database = new DrinkHistoryDatabase(context).getReadableDatabase();
+        String query = generateOverallQuery();
+
+        ArrayList<Drink> result = new ArrayList<>();
+
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+
+            int type = -1;
+
+            do {
+
+                type++;
+
+                Drink drink = new Drink();
+
+                drink.setType(type);
+                drink.setVolume(cursor.getInt(cursor.getColumnIndex(COL_OVERALL)));
+
+                result.add(drink);
+
+            } while (cursor.moveToNext());
+
+        } else {
+
+            cursor.close();
+            database.close();
+
+            listener.onError("Database error, cannot load timeline");
+
+            return;
+        }
+
+        cursor.close();
+        database.close();
+
+        listener.onDataReceived(result);
+    }
     //endregion
 
     //region Add methods
@@ -189,6 +254,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = new DrinkHistoryDatabase(context).getWritableDatabase();
 
         ContentValues values = new ContentValues();
+
         values.put(COL_TIME, drink.getTime());
         values.put(COL_DRINK_ID, drink.getType());
         values.put(COL_VOLUME, drink.getVolume());
@@ -196,7 +262,8 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
         Log.d(TAG, "Adding drink, id = " + drink.getType() + " vol = " + drink.getVolume());
 
         db.insert(TIMELINE_TABLE, null, values);
-        db.close();
+
+        updateDay(db, drink, true);
 
     }
 
@@ -206,10 +273,11 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(COL_START_TIME, day.getStartTime());
-        values.put(COL_PERCENT, day.getPercent());
+        values.put(COL_MAX_VOLUME, Prefs.getBaseVol());
+        values.put(COL_CUR_VOLUME, 0);
 
-        Log.d(TAG, "addDay: startTime is "    + day.getStartTime()
-                        + " current time is " + TimeUtil.unixTime());
+        Log.d(TAG, "addDay: startTime is " + day.getStartTime()
+                + " current time is " + TimeUtil.unixTime());
 
         Log.d(TAG, "addDay: percent = " + day.getPercent());
 
@@ -220,25 +288,79 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
     //endregion
 
     //region Update
-    public static void updateDay(Context context, Day day) {
+    private static void updateDay(SQLiteDatabase database, Drink drink, boolean adding) {
 
-        SQLiteDatabase db = new DrinkHistoryDatabase(context).getWritableDatabase();
+        int     styledVolume    = (int) (drink.getVolume() * drink.getCoefficient());
+        boolean isAlcohol       = styledVolume < 0;
+        long    startOfTheDay   = TimeUtil.getStartOfTheDay(drink.getTime());
 
-        ContentValues values = new ContentValues();
-        values.put(COL_PERCENT, day.getPercent());
+        if (startOfTheDay == Prefs.getSavedToday()) {
+
+            int currentValue = isAlcohol ?
+                    Prefs.getCurrentMax()
+                    :
+                    Prefs.getCurrentVol();
+
+            Prefs.put(
+                    isAlcohol ?
+                            Prefs.KEY_CURRENT_TARGET_VOL
+                            :
+                            Prefs.KEY_CURRENT_USER_VOL,
+                    adding ?
+                            currentValue + Math.abs(styledVolume)
+                            :
+                            currentValue - Math.abs(styledVolume)
+            );
+            Prefs.commit();
+        }
+
+        String resultQuery =
+                "UPDATE "
+                        + DAYS_TABLE
+                        + " SET "
+                        + (isAlcohol ? COL_MAX_VOLUME : COL_CUR_VOLUME)
+                        + " = "
+                        + (isAlcohol ? COL_MAX_VOLUME : COL_CUR_VOLUME)
+                        + (adding ? " + " : " - ")
+                        + Math.abs(styledVolume)
+                        + " WHERE "
+                        + COL_START_TIME
+                        + " = "
+                        + startOfTheDay;
+
+        Log.d("DrinkHistoryDatabase", "updateDay - resultQuery: "
+                + resultQuery);
 
         // updating row
-        db.update(
-                DAYS_TABLE,
-                values,
-                COL_START_TIME + " = " + day.getStartTime(),
-                null
-        );
+        database.execSQL(resultQuery);
 
-        Log.d(TAG, "updateDay: startTime = " + day.getStartTime()
-                           + " percent = "   + day.getPercent());
+        if (sUpdateListener != null) sUpdateListener.onUpdate();
 
-        db.close();
+        database.close();
+    }
+
+    public static void updateCurrentDay(Context c) {
+
+        SQLiteDatabase database = new DrinkHistoryDatabase(c).getWritableDatabase();
+
+        // updating row
+        String resultQuery =
+                "UPDATE "
+                        + DAYS_TABLE
+                        + " SET "
+                        + COL_MAX_VOLUME
+                        + " = "
+                        + Prefs.getCurrentMax()
+                        + " WHERE "
+                        + COL_START_TIME
+                        + " = "
+                        + Prefs.getSavedToday();
+
+        Log.d("DrinkHistoryDatabase", "updateCurrentDay - resultQuery: "
+                + resultQuery);
+
+        database.execSQL(resultQuery);
+        database.close();
     }
     //endregion
 
@@ -251,7 +373,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
         db.delete(TIMELINE_TABLE, COL_TIME + " = " + drink.getTime(), null);
 
-        db.close();
+        updateDay(db, drink, false);
     }
     //endregion
 
@@ -278,6 +400,26 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
         return !(rows == 0);
     }
 
+    public static void clearTables(Context c) {
+
+        SQLiteDatabase db = new DrinkHistoryDatabase(c).getWritableDatabase();
+
+        db.delete(DAYS_TABLE, null, null);
+        db.delete(TIMELINE_TABLE, null, null);
+
+        db.close();
+    }
+
+    public static void drop(Context c) {
+
+        SQLiteDatabase db = new DrinkHistoryDatabase(c).getWritableDatabase();
+
+        db.execSQL("DROP TABLE IF EXISTS " + DAYS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TIMELINE_TABLE);
+
+        db.close();
+    }
+
     //region Helper method
     private static ArrayList<Day> formatList(@NonNull ArrayList<Day> rawDays) {
 
@@ -299,7 +441,7 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
                 while (startTime < next.getStartTime()) {
 
-                    res.add(new Day(0, startTime));
+                    res.add(new Day(0, 0, startTime));
 
                     startTime += 3600 * 24;
                 }
@@ -316,5 +458,28 @@ public class DrinkHistoryDatabase extends SQLiteOpenHelper {
 
         return res;
     }
+
+    private static String generateOverallQuery() {
+
+        StringBuilder queryBuilder = new StringBuilder();
+
+        String queryRoot = "SELECT"
+                + " SUM" + "(" + COL_VOLUME + ")"
+                + " AS " + COL_OVERALL
+                + " FROM " + TIMELINE_TABLE;
+
+        queryBuilder.append(queryRoot).append("\n\nUNION ALL\n\n");
+
+        for (int i = 0 ; i < Drink.DRINK_TYPES.length ; i++) {
+
+            queryBuilder.append(queryRoot)
+                    .append(" WHERE ")
+                    .append(COL_DRINK_ID).append(" = ").append(Drink.DRINK_TYPES[i])
+                    .append(i == (Drink.DRINK_TYPES.length - 1) ? "" : "\n\nUNION ALL\n\n");
+        }
+
+        return queryBuilder.toString();
+    }
+
     //endregion
 }

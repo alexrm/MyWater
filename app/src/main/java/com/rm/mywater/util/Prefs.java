@@ -4,10 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.rm.mywater.model.Drink;
-
-import java.util.ArrayList;
-
 /**
  * Created by alex on 08/04/15.
  */
@@ -41,21 +37,7 @@ public final class Prefs {
     public static final String KEY_BASE_TARGET_VOL      = "base_target";
     //endregion
 
-    //region Overall volume keys
-    public static final String KEY_OVERALL_VOL          = "overall_vol";
-    public static final String KEY_OVERALL_VOL_WATER    = "overall_vol_water";
-    public static final String KEY_OVERALL_VOL_TEA      = "overall_vol_tea";
-    public static final String KEY_OVERALL_VOL_COFFEE   = "overall_vol_coffee";
-    public static final String KEY_OVERALL_VOL_MILK     = "overall_vol_milk";
-    public static final String KEY_OVERALL_VOL_SODA     = "overall_vol_soda";
-    public static final String KEY_OVERALL_VOL_ALCOHOL  = "overall_vol_alcohol";
-    public static final String KEY_OVERALL_VOL_JUICE    = "overall_vol_juice";
-    public static final String KEY_OVERALL_VOL_ENERGY   = "overall_vol_energy";
-    public static final String KEY_OVERALL_VOL_OTHER    = "overall_vol_other";
-    //endregion
-
     //region Database keys
-    public static final String KEY_DB_DAY_EXISTS  = "day_exists";
     public static final String KEY_DB_SAVED_TODAY = "day_is_today";
     //endregion
 
@@ -122,28 +104,6 @@ public final class Prefs {
         return sPreferences;
     }
 
-    public static int getOverall() {
-
-        return get().getInt(KEY_OVERALL_VOL, 65);
-    }
-
-    public static ArrayList<Drink> getOverallDrinks() {
-
-        ArrayList<Drink> overall = new ArrayList<>();
-
-        overall.add(new Drink(Drink.WATER, get().getFloat(KEY_OVERALL_VOL_WATER, 12.3F)));
-        overall.add(new Drink(Drink.TEA, get().getFloat(KEY_OVERALL_VOL_TEA, 3.0F)));
-        overall.add(new Drink(Drink.COFFEE, get().getFloat(KEY_OVERALL_VOL_COFFEE, 14.9F)));
-        overall.add(new Drink(Drink.MILK, get().getFloat(KEY_OVERALL_VOL_MILK, 4.5F)));
-        overall.add(new Drink(Drink.SODA, get().getFloat(KEY_OVERALL_VOL_SODA, 3.1F)));
-        overall.add(new Drink(Drink.ALCOHOL, get().getFloat(KEY_OVERALL_VOL_ALCOHOL, 7.9F)));
-        overall.add(new Drink(Drink.JUICE, get().getFloat(KEY_OVERALL_VOL_JUICE, 16.3F)));
-        overall.add(new Drink(Drink.ENERGY, get().getFloat(KEY_OVERALL_VOL_ENERGY, 3.3F)));
-        overall.add(new Drink(Drink.OTHER, get().getFloat(KEY_OVERALL_VOL_OTHER, 1.2F)));
-
-        return overall;
-    }
-
     public static void commit() {
 
         sEditor.commit();
@@ -158,27 +118,34 @@ public final class Prefs {
 
     public static void saveToday() {
 
-        putAndCommit(KEY_DB_SAVED_TODAY, TimeUtil.getToday());
+        putAndCommit(KEY_DB_SAVED_TODAY, TimeUtil.getStartOfTheDay(TimeUtil.unixTime()));
     }
 
-    public static boolean isDayExists() {
-
-        return sPreferences.getBoolean(KEY_DB_DAY_EXISTS, false);
-    }
     //endregion
 
-    public static int getPercent() {
+    public static int getCurrentMax() {
 
-        int percent = sPreferences.getInt(KEY_CURRENT_PERCENT, 0);
+        int curMax = sPreferences.getInt(KEY_CURRENT_TARGET_VOL, getBaseVol());
 
-        Log.d(TAG, "getPercent: " + percent + "%");
+        Log.d("Prefs", "getCurrentMax - curMax: "
+                + curMax);
 
-        return percent;
+        return curMax;
     }
 
-    public static float getBaseVol() {
+    public static int getCurrentVol() {
 
-        float baseVol = sPreferences.getFloat(KEY_CURRENT_TARGET_VOL, 0);
+        int curVol = sPreferences.getInt(KEY_CURRENT_USER_VOL, 0);
+
+        Log.d("Prefs", "getCurrentVol - curVol: "
+                + curVol);
+
+        return curVol;
+    }
+
+    public static int getBaseVol() {
+
+        int baseVol = sPreferences.getInt(KEY_BASE_TARGET_VOL, 1800);
 
         Log.d(TAG, "getBaseVol: " + baseVol);
 
@@ -191,8 +158,12 @@ public final class Prefs {
         Log.d(TAG, "Clear");
 
         sEditor.putInt(KEY_CURRENT_PERCENT, 0);
-        sEditor.putFloat(KEY_CURRENT_USER_VOL, 0);
-        sEditor.putFloat(KEY_CURRENT_TARGET_VOL, getBaseVol());
+        sEditor.putInt(KEY_CURRENT_USER_VOL, 0);
+        sEditor.putInt(KEY_CURRENT_TARGET_VOL, getBaseVol());
         sEditor.commit();
+    }
+
+    public static String getUnit() {
+        return get().getString(KEY_UNIT, "мл");
     }
 }
