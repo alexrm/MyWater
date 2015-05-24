@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -47,6 +48,7 @@ class Wave extends View {
     private int left, right, bottom;
     // ω
     private double omega;
+    private boolean mStopped = false;
 
     public Wave(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.waveViewStyle);
@@ -80,6 +82,29 @@ class Wave extends View {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 mWaveHeight * 2);
         setLayoutParams(params);
+    }
+
+    private void stopWave() {
+
+        mStopped = true;
+        removeCallbacks(mRefreshProgressRunnable);
+    }
+
+    private void restartWave() {
+
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                Log.d("Wave", "run");
+
+//                removeCallbacks(mRefreshProgressRunnable);
+                mStopped = false;
+                removeCallbacks(mRefreshProgressRunnable);
+                mRefreshProgressRunnable = new RefreshProgressRunnable();
+                post(mRefreshProgressRunnable);
+            }
+        }, 200);
     }
 
     public void initializePainters() {
@@ -126,10 +151,10 @@ class Wave extends View {
         return 0;
     }
 
-    /**
-     * calculate wave track
-     */
     private void calculatePath() {
+
+        if (isStopped()) return;
+
         mBlowWavePath.reset();
 
         getWaveOffset();
@@ -150,12 +175,31 @@ class Wave extends View {
         mBlowWavePath.lineTo(right, bottom);
     }
 
+    private boolean isStopped() {
+        return mStopped;
+    }
+
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
-        if (View.GONE == visibility) {
+
+        Log.d("Wave", "onWindowVisibilityChanged - visibility: "
+                + visibility);
+
+        if (GONE == visibility) {
+
+            stopWave();
             removeCallbacks(mRefreshProgressRunnable);
+
         } else {
+
+            if (isStopped()) {
+
+                Log.d("Wave", "onWindowVisibilityChanged ONRESTART");
+                restartWave();
+                return;
+            }
+
             removeCallbacks(mRefreshProgressRunnable);
             mRefreshProgressRunnable = new RefreshProgressRunnable();
             post(mRefreshProgressRunnable);
@@ -170,8 +214,13 @@ class Wave extends View {
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
+
+        Log.d("Wave", "onWindowFocusChanged focus: " + hasWindowFocus);
+
         if (hasWindowFocus) {
+
             if (mWaveLength == 0) {
+
                 startWave();
             }
         }

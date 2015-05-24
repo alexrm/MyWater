@@ -57,8 +57,14 @@ public class StatisticsFragment extends BaseFragment {
     private class TabPagerAdapter extends FragmentStatePagerAdapter
             implements ViewPager.OnPageChangeListener {
 
+        private OverallFragment mOverallFragment;
+        private DaysFragment    mDaysFragment;
+
         public TabPagerAdapter(FragmentManager fm) {
             super(fm);
+
+            mOverallFragment = new OverallFragment();
+            mDaysFragment    = new DaysFragment();
 
             mFriendsTabs.setOnPageChangeListener(this);
         }
@@ -68,8 +74,8 @@ public class StatisticsFragment extends BaseFragment {
 
             switch (position) {
 
-                case DAYS:    return new DaysFragment();
-                case OVERALL: return OverallFragment.getInstance();
+                case DAYS:    return mDaysFragment;
+                case OVERALL: return mOverallFragment;
                 default:      return new Fragment();
             }
         }
@@ -111,9 +117,7 @@ public class StatisticsFragment extends BaseFragment {
 
                 case OVERALL: {
 
-                    OverallFragment
-                            .getInstance()
-                            .onFragmentAction(null, -1);
+                    mOverallFragment.onFragmentAction(null, -1);
                     break;
                 }
 

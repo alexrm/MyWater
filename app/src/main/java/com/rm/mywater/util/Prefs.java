@@ -30,6 +30,7 @@ public final class Prefs {
 
     //region User settings
     public static final String KEY_UNIT                 = "unit";
+    public static final String KEY_TRAINING             = "training";
     public static final String KEY_USER_WEIGHT          = "user_weight";
     public static final String KEY_USER_GENDER          = "user_gender";
 

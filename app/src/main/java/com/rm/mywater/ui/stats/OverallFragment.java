@@ -36,8 +36,6 @@ import java.util.Collection;
  */
 public class OverallFragment extends BaseFragment implements OnFragmentInteractionListener {
 
-    private static OverallFragment sInstance = new OverallFragment();
-
     private ArrayList<Drink> mOverallList;
     private ParallaxRecyclerAdapter<Drink> mParallaxAdapter;
 
@@ -55,10 +53,6 @@ public class OverallFragment extends BaseFragment implements OnFragmentInteracti
 
     public OverallFragment() {
         // Required empty public constructor
-    }
-
-    public static OverallFragment getInstance() {
-        return sInstance;
     }
 
     @Override

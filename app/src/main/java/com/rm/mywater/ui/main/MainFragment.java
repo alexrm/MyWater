@@ -1,6 +1,8 @@
 package com.rm.mywater.ui.main;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.john.waveview.WaveView;
@@ -35,6 +39,9 @@ public class MainFragment extends BaseFragment
     private int mPercentProgress;
     private float mCurrentVolume;
     private float mCurrentMaximum;
+
+    // splash views
+    private RelativeLayout mSplash;
 
     // data views
     private WaveView mWave;
@@ -65,6 +72,22 @@ public class MainFragment extends BaseFragment
         if (mToolbar != null) mToolbar.setVisibility(View.GONE);
 
         DrinkHistoryDatabase.setUpdateListener(this);
+
+        mSplash = (RelativeLayout) view.findViewById(R.id.splash_view);
+        mSplash.animate()
+                .setDuration(500)
+                .setStartDelay(1000)
+                .alpha(0)
+                .setInterpolator(new DecelerateInterpolator())
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+
+                        mSplash.setVisibility(View.GONE);
+                    }
+                })
+                .start();
 
         mWave = (WaveView) view.findViewById(R.id.wave_view);
         mPercent = (TextView) view.findViewById(R.id.main_text_percent);

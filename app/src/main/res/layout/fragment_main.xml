@@ -68,4 +68,10 @@
         android:background="@drawable/background_main_elements"
         android:src="@drawable/icon_settings"/>
 
+    <include
+        layout="@layout/box_splash_view"
+        android:id="@+id/splash_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>
