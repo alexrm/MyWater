@@ -10,12 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.john.waveview.WaveView;
 import com.rm.mywater.MainActivity;
 import com.rm.mywater.OnFragmentInteractionListener;
 import com.rm.mywater.R;
@@ -24,6 +23,8 @@ import com.rm.mywater.database.OnDataUpdatedListener;
 import com.rm.mywater.model.Drink;
 import com.rm.mywater.util.Prefs;
 import com.rm.mywater.util.base.BaseFragment;
+import com.rm.mywater.views.wave.Wave;
+import com.rm.mywater.views.wave.WaveView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,18 +34,23 @@ public class MainFragment extends BaseFragment
         OnDrinkChosenListener,
         OnDataUpdatedListener {
 
-    private OnFragmentInteractionListener mInterationListener;
+    private OnFragmentInteractionListener mInteractionListener;
+    private RelativeLayout mRoot;
 
     // data
     private int mPercentProgress;
     private float mCurrentVolume;
     private float mCurrentMaximum;
 
+    // picker
+    private ChooseDrinkDialog mChooserDialog;
+
     // splash views
     private RelativeLayout mSplash;
 
     // data views
-    private WaveView mWave;
+    private WaveView mWaveView;
+    private Wave mWave;
     private TextView mPercent;
     private TextView mVolume;
 
@@ -73,23 +79,9 @@ public class MainFragment extends BaseFragment
 
         DrinkHistoryDatabase.setUpdateListener(this);
 
-        mSplash = (RelativeLayout) view.findViewById(R.id.splash_view);
-        mSplash.animate()
-                .setDuration(500)
-                .setStartDelay(1000)
-                .alpha(0)
-                .setInterpolator(new DecelerateInterpolator())
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
+        showSplash(view);
 
-                        mSplash.setVisibility(View.GONE);
-                    }
-                })
-                .start();
-
-        mWave = (WaveView) view.findViewById(R.id.wave_view);
+        mWaveView = (WaveView) view.findViewById(R.id.wave_view);
         mPercent = (TextView) view.findViewById(R.id.main_text_percent);
         mVolume = (TextView) view.findViewById(R.id.main_text_volume);
 
@@ -110,7 +102,7 @@ public class MainFragment extends BaseFragment
             @Override
             public void onClick(View v) {
 
-                mInterationListener.onFragmentAction(
+                mInteractionListener.onFragmentAction(
                         null,
                         OnFragmentInteractionListener.KEY_OPEN_STATS
                 );
@@ -123,7 +115,7 @@ public class MainFragment extends BaseFragment
             @Override
             public void onClick(View v) {
 
-                mInterationListener.onFragmentAction(
+                mInteractionListener.onFragmentAction(
                         null,
                         OnFragmentInteractionListener.KEY_OPEN_NOTIFY
                 );
@@ -136,7 +128,7 @@ public class MainFragment extends BaseFragment
             @Override
             public void onClick(View v) {
 
-                mInterationListener.onFragmentAction(
+                mInteractionListener.onFragmentAction(
                         null,
                         OnFragmentInteractionListener.KEY_OPEN_SETTINGS
                 );
@@ -144,11 +136,40 @@ public class MainFragment extends BaseFragment
         });
     }
 
+    private void showSplash(View root) {
+
+        mRoot = (RelativeLayout) root.findViewById(R.id.main_root_view);
+
+        mSplash = (RelativeLayout) root.findViewById(R.id.splash_view);
+        mSplash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }); // stub
+
+        mSplash.animate()
+                .setDuration(300)
+                .setStartDelay(800)
+                .alpha(0)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+
+                        mSplash.setVisibility(View.GONE);
+                        mRoot.removeView(mSplash);
+                    }
+                })
+                .start();
+    }
+
     private void showChooserDialog() {
 
-        ChooseDrinkDialog chooseDrinkDialog = new ChooseDrinkDialog(getActivity());
-        chooseDrinkDialog.setOnDrinkChosenListener(this);
-        chooseDrinkDialog.show();
+        mChooserDialog = new ChooseDrinkDialog(getActivity());
+        mChooserDialog.setOnDrinkChosenListener(MainFragment.this);
+        mChooserDialog.show();
     }
 
     private void updateData() {
@@ -168,7 +189,7 @@ public class MainFragment extends BaseFragment
         Log.d("MainFragment", "updateData - mPercentProgress: "
                 + mPercentProgress);
 
-        mWave.setProgress(mPercentProgress);
+        mWaveView.setProgress(mPercentProgress);
         mPercent.setText(getString(R.string.main_data_percent, mPercentProgress, "%"));
 
         mVolume.setText(
@@ -178,13 +199,40 @@ public class MainFragment extends BaseFragment
                         mCurrentMaximum / 1000
                 )
         );
+
+        if (mChooserDialog != null) {
+
+            mChooserDialog.closeDialog();
+            mChooserDialog = null;
+        }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        mInterationListener = (MainActivity) activity;
+        mInteractionListener = (MainActivity) activity;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        Log.d("MainFragment", "onStop");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mWaveView.getWave().stopWave();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mWaveView.getWave().restartWave();
     }
 
     @Override

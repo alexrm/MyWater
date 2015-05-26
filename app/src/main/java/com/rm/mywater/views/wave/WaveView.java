@@ -1,8 +1,6 @@
-package com.john.waveview;
+package com.rm.mywater.views.wave;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -14,46 +12,25 @@ import android.widget.LinearLayout;
  */
 public class WaveView extends LinearLayout {
 
-    protected static final int LARGE = 1;
-    protected static final int MIDDLE = 2;
-    protected static final int LITTLE = 3;
-
-    private int mBlowWaveColor;
     private int mProgress;
-    private int mWaveHeight;
-    private int mWaveMultiple;
-    private int mWaveHz;
-
     private int mWaveToTop;
 
     private Wave mWave;
     private Solid mSolid;
-    private LinearLayout.LayoutParams mSolidParams;
-
-    private final int DEFAULT_BLOW_WAVE_COLOR = Color.WHITE;
-    private final int DEFAULT_PROGRESS = 80;
+    private LayoutParams mSolidParams;
 
     public WaveView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
-        //load styled attributes.
-        final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.WaveView, R.attr.waveViewStyle, 0);
-        mBlowWaveColor = attributes.getColor(R.styleable.WaveView_blow_wave_color, DEFAULT_BLOW_WAVE_COLOR);
-        mProgress = attributes.getInt(R.styleable.WaveView_progress, DEFAULT_PROGRESS);
-        mWaveHeight = attributes.getInt(R.styleable.WaveView_wave_height, MIDDLE);
-        mWaveMultiple = attributes.getInt(R.styleable.WaveView_wave_length, LARGE);
-        mWaveHz = attributes.getInt(R.styleable.WaveView_wave_hz, MIDDLE);
-        attributes.recycle();
 
-        mWave = new Wave(context, null);
-        mWave.initializeWaveSize(mWaveMultiple, mWaveHeight, mWaveHz);
-        mWave.setBlowWaveColor(mBlowWaveColor);
+        mWave = new Wave(context);
+        mWave.initializeWaveSize();
         mWave.initializePainters();
 
-        mSolid = new Solid(context, null);
+        mSolid = new Solid(context);
         mSolid.setBlowWavePaint(mWave.getBlowWavePaint());
 
-        mSolidParams = (LinearLayout.LayoutParams) mSolid.getLayoutParams();
+        mSolidParams = (LayoutParams) mSolid.getLayoutParams();
 
         addView(mWave);
         addView(mSolid);
@@ -62,13 +39,19 @@ public class WaveView extends LinearLayout {
     }
 
     public void setProgress(int progress) {
+
         this.mProgress = progress > 100 ? 100 : (progress > 0) ? progress : 1;
         computeWaveToTop();
+    }
+
+    public Wave getWave() {
+        return mWave;
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
+
         if (hasWindowFocus) {
             computeWaveToTop();
         }
@@ -82,7 +65,7 @@ public class WaveView extends LinearLayout {
 
             if (mSolidParams != null) {
 
-                mSolidParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
+                mSolidParams.height = LayoutParams.MATCH_PARENT;
                 mSolidParams.weight = 0;
                 mSolid.setLayoutParams(mSolidParams);
             }
@@ -91,7 +74,7 @@ public class WaveView extends LinearLayout {
 
             if (mSolidParams != null) {
 
-                mSolidParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                mSolidParams.height = LayoutParams.WRAP_CONTENT;
                 mSolidParams.weight = 1;
                 mSolid.setLayoutParams(mSolidParams);
             }
@@ -121,12 +104,14 @@ public class WaveView extends LinearLayout {
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
+
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         setProgress(ss.progress);
     }
 
     private static class SavedState extends BaseSavedState {
+
         int progress;
 
         /**

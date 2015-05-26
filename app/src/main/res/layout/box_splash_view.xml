@@ -24,9 +24,8 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
         android:textColor="@color/color_white"
-        android:textSize="22sp"
+        android:textSize="30sp"
         android:gravity="center_horizontal"
-        android:textStyle="bold"
         android:text="My water"
         />
 
@@ -40,7 +39,7 @@
         android:textColor="@color/color_white"
         android:textSize="18sp"
         android:gravity="center_horizontal"
-        android:text="Drink your water norm everyday!"
+        android:text="Be healthy!"
         />
 
 </RelativeLayout>

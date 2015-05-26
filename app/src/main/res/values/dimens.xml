@@ -9,4 +9,6 @@
 
     <dimen name="dialog_slide_x">16dp</dimen>
 
+    <dimen name="wave_height">14dp</dimen>
+
 </resources>

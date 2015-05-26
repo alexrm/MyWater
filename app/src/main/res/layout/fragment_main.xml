@@ -1,22 +1,16 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_window_background"
     tools:context="com.rm.mywater.ui.main.MainFragment">
 
-    <com.john.waveview.WaveView
+    <com.rm.mywater.views.wave.WaveView
         android:id="@+id/wave_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:above_wave_color="@color/color_accent"
-        app:blow_wave_color="@color/color_accent"
-        app:progress="50"
-        app:wave_height="large"
-        app:wave_hz="slow"
-        app:wave_length="middle"/>
+        android:layout_height="match_parent"/>
 
     <include layout="@layout/box_main_elements"
         android:id="@+id/box_main_data"

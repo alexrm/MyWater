@@ -66,7 +66,7 @@ public class ChooserDrinkAdapter extends RecyclerView.Adapter<ChooserDrinkAdapte
         return mDrinkTypeList.size();
     }
 
-    public void setOnClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
 
         mListener = listener;
     }

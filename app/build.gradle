@@ -37,5 +37,4 @@ dependencies {
     compile 'com.github.blackfizz:eazegraph:1.2.5l@aar'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.github.kanytu:android-parallax-recyclerview:v1.2'
-    compile project(':library')
 }

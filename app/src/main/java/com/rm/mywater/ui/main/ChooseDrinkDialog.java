@@ -39,7 +39,9 @@ import com.rm.mywater.util.Prefs;
 public class ChooseDrinkDialog extends Dialog
         implements
         DialogInterface.OnShowListener,
-        ChooserDrinkAdapter.OnItemClickListener, AdapterView.OnItemSelectedListener {
+        ChooserDrinkAdapter.OnItemClickListener,
+        AdapterView.OnItemSelectedListener,
+        DialogInterface.OnDismissListener {
 
     // root
     private boolean mIsFirstPage = true;
@@ -51,7 +53,7 @@ public class ChooseDrinkDialog extends Dialog
     // first
     private RelativeLayout mFirst;
     private RecyclerView mDrinksGrid;
-    private ImageView mDrinksGridClose;
+    private ImageView mCloseButton;
 
     // second
     private RelativeLayout mSecond;
@@ -79,8 +81,10 @@ public class ChooseDrinkDialog extends Dialog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_choose_drink);
+
         Log.d("DIALOG", "CREATE");
         setOnShowListener(this);
+        setOnDismissListener(this);
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.height = WindowManager.LayoutParams.MATCH_PARENT;
@@ -93,14 +97,15 @@ public class ChooseDrinkDialog extends Dialog
         mContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
-        });
+        }); // stub
 
         mFirst = (RelativeLayout) findViewById(R.id.chooser_first);
-        initFirst();
+        initFirstPage();
 
         mSecond = (RelativeLayout) findViewById(R.id.chooser_second);
-        initSecond();
+        initSecondPage();
 
         mRoot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +123,7 @@ public class ChooseDrinkDialog extends Dialog
 
         mContent.animate()
                 .translationYBy(-Dimen.get(R.dimen.dialog_y_up))
-                .setInterpolator(new OvershootInterpolator(1.2F))
+                .setInterpolator(new OvershootInterpolator(1.1F))
                 .setDuration(400)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
@@ -144,6 +149,15 @@ public class ChooseDrinkDialog extends Dialog
     }
 
     @Override
+    public void onDismiss(DialogInterface dialog) {
+
+        Log.d("ChooseDrinkDialog", "onDismiss");
+//        if (mIsSelected) {
+//            mDrinkChosenListener.onChose(new Drink(mDrinkType, mVolume));
+//        }
+    }
+
+    @Override
     public void onBackPressed() {
 
         if (!mIsFirstPage) {
@@ -157,14 +171,50 @@ public class ChooseDrinkDialog extends Dialog
 
     }
 
+    @Override
+    public <T> void onItemClick(T data, int position) {
+
+        mDrinkType = (Integer) data;
+
+        processTransition();
+
+        mDrinkChosenName.setText(
+                DrinkUtil.getTitle(mDrinkType)
+        );
+
+        mDrinkChosenIcon.setColorFilter(
+                DrinkUtil.getDrinkColor(mDrinkType),
+                PorterDuff.Mode.MULTIPLY
+        );
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int position, long id) {
+
+        int value = Integer.parseInt(
+                parent
+                        .getAdapter()
+                        .getItem(position)
+                        .toString()
+                        .split(" ")[0]);
+
+        setVolumeValue(value);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     public void setOnDrinkChosenListener(OnDrinkChosenListener drinkChosenListener) {
         mDrinkChosenListener = drinkChosenListener;
     }
 
-    private void initFirst() {
+    private void initFirstPage() {
 
-        mDrinksGridClose = (ImageView) findViewById(R.id.chooser_close);
-        mDrinksGridClose.setOnClickListener(new View.OnClickListener() {
+        mCloseButton = (ImageView) findViewById(R.id.chooser_close);
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -176,14 +226,14 @@ public class ChooseDrinkDialog extends Dialog
         ChooserDrinkAdapter adapter = new ChooserDrinkAdapter();
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
 
-        adapter.setOnClickListener(this);
+        adapter.setOnItemClickListener(this);
 
         mDrinksGrid.setLayoutManager(layoutManager);
         mDrinksGrid.setHasFixedSize(true);
         mDrinksGrid.setAdapter(adapter);
     }
 
-    private void initSecond()  {
+    private void initSecondPage() {
 
         mBackButton = (ImageView) findViewById(R.id.chooser_back);
         mBackButton.setOnClickListener(new View.OnClickListener() {
@@ -202,9 +252,9 @@ public class ChooseDrinkDialog extends Dialog
 
                 if (mIsSelected) return;
 
-                mIsSelected = true;
                 mDrinkChosenListener.onChose(new Drink(mDrinkType, mVolume));
-                closeDialog();
+
+                mIsSelected = true;
             }
         });
 
@@ -227,51 +277,17 @@ public class ChooseDrinkDialog extends Dialog
         mDrinkChosenName = (TextView) findViewById(R.id.chooser_chosen_drink_name);
     }
 
-    @Override
-    public <T> void onItemClick(T data, int position) {
-
-        mDrinkType = (Integer) data;
-
-        processTransition();
-
-        mDrinkChosenName.setText(
-                DrinkUtil.getTitle(mDrinkType)
-        );
-
-        mDrinkChosenIcon.setColorFilter(
-                DrinkUtil.getDrinkColor(mDrinkType),
-                PorterDuff.Mode.MULTIPLY
-        );
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        int value = Integer.parseInt(
-                parent
-                        .getAdapter()
-                        .getItem(position)
-                        .toString()
-                        .split(" ")[0]);
-
-        getVolumeValue(value);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    private void closeDialog() {
+    public void closeDialog() {
 
         Log.d("DIALOG", "CLOSE");
 
+        mContent.removeView(mIsFirstPage ? mSecond : mFirst);
+
         mContent.animate()
                 .translationYBy(Dimen.get(R.dimen.dialog_y_down))
-                .setInterpolator(new AnticipateInterpolator(1.2F))
+                .setInterpolator(new AnticipateInterpolator(1.1F))
                 .setDuration(400)
                 .setListener(new AnimatorListenerAdapter() {
-
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -375,46 +391,7 @@ public class ChooseDrinkDialog extends Dialog
         mCombineAnimSet.start();
     }
 
-    private void getVolumeValue(int value) {
-
-//        switch (position) {
-//
-//            case 0:
-//                mVolume = 30;
-//                break;
-//
-//            case 1:
-//                mVolume = 50;
-//                break;
-//
-//            case 2:
-//                mVolume = 100;
-//                break;
-//
-//            case 3:
-//                mVolume = 150;
-//                break;
-//
-//            case 4:
-//                mVolume = 200;
-//                break;
-//
-//            case 5:
-//                mVolume = 250;
-//                break;
-//
-//            case 6:
-//                mVolume = 300;
-//                break;
-//
-//            case 7:
-//                mVolume = 500;
-//                break;
-//
-//            case 8:
-//                mVolume = 1000;
-//                break;
-//        }
+    private void setVolumeValue(int value) {
 
         mVolume = value;
 

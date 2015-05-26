@@ -94,6 +94,5 @@
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="eazegraph-1.2.5l" level="project" />
-    <orderEntry type="module" module-name="library" exported="" />
   </component>
 </module>

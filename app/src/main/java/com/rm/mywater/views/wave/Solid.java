@@ -1,4 +1,4 @@
-package com.john.waveview;
+package com.rm.mywater.views.wave;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,8 +14,8 @@ class Solid extends View {
 
     private Paint blowWavePaint;
 
-    public Solid(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public Solid(Context context) {
+        this(context, null, 0);
     }
 
     public Solid(Context context, AttributeSet attrs, int defStyleAttr) {
