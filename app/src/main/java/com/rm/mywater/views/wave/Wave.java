@@ -75,39 +75,49 @@ public class Wave extends View {
         setLayoutParams(params);
     }
 
-    // TODO make public
-    public void stopWave() {
-
-        Log.d("Wave", "stopWave");
-
-        mStopped = true;
-        removeCallbacks(mRefreshProgressRunnable);
-    }
-
-    // TODO make public
-    public void restartWave() {
-
-        Log.d("Wave", "restartWave");
-
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                mStopped = false;
-                removeCallbacks(mRefreshProgressRunnable);
-                mRefreshProgressRunnable = new RefreshProgressRunnable();
-                post(mRefreshProgressRunnable);
-            }
-        }, 300);
-
-    }
-
     public void initializePainters() {
 
         mBlowWavePaint.setColor(WAVE_COLOR);
         mBlowWavePaint.setAlpha(WAVE_ALPHA);
         mBlowWavePaint.setStyle(Paint.Style.FILL);
         mBlowWavePaint.setAntiAlias(true);
+    }
+
+    // TODO make public
+    public void stopWave() {
+
+        Log.d("Wave", "stopWave");
+
+        removeCallbacks(mRefreshProgressRunnable);
+        mStopped = true;
+    }
+
+    // TODO make public
+    public void restartWaveSmooth() {
+
+        Log.d("Wave", "restartWaveSmooth");
+
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                removeCallbacks(mRefreshProgressRunnable);
+                mStopped = false;
+                mRefreshProgressRunnable = new RefreshProgressRunnable();
+                post(mRefreshProgressRunnable);
+            }
+        }, 350);
+
+    }
+
+    public void restartWave() {
+
+        Log.d("Wave", "restartWave");
+
+        removeCallbacks(mRefreshProgressRunnable);
+        mStopped = false;
+        mRefreshProgressRunnable = new RefreshProgressRunnable();
+        post(mRefreshProgressRunnable);
     }
 
     private void calculatePath() {
@@ -141,6 +151,9 @@ public class Wave extends View {
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
+
+        Log.d("Wave", "onWindowVisibilityChanged - visibility: "
+                + visibility);
     }
 
     @Override

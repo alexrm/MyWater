@@ -84,7 +84,7 @@ public class ChooseDrinkDialog extends Dialog
 
         Log.d("DIALOG", "CREATE");
         setOnShowListener(this);
-        setOnDismissListener(this);
+//        setOnDismissListener(this);
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.height = WindowManager.LayoutParams.MATCH_PARENT;

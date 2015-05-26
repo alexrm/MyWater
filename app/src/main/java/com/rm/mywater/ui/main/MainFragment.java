@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ public class MainFragment extends BaseFragment
 
     private OnFragmentInteractionListener mInteractionListener;
     private RelativeLayout mRoot;
+    private boolean mIsCreated = false;
 
     // data
     private int mPercentProgress;
@@ -74,16 +76,19 @@ public class MainFragment extends BaseFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        DrinkHistoryDatabase.setUpdateListener(this);
 
         if (mToolbar != null) mToolbar.setVisibility(View.GONE);
 
-        DrinkHistoryDatabase.setUpdateListener(this);
+        mRoot = (RelativeLayout) view.findViewById(R.id.main_root_view);
 
         showSplash(view);
 
         mWaveView = (WaveView) view.findViewById(R.id.wave_view);
         mPercent = (TextView) view.findViewById(R.id.main_text_percent);
         mVolume = (TextView) view.findViewById(R.id.main_text_volume);
+
+        mWave = mWaveView.getWave();
 
         updateData();
 
@@ -138,8 +143,6 @@ public class MainFragment extends BaseFragment
 
     private void showSplash(View root) {
 
-        mRoot = (RelativeLayout) root.findViewById(R.id.main_root_view);
-
         mSplash = (RelativeLayout) root.findViewById(R.id.splash_view);
         mSplash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,15 +163,30 @@ public class MainFragment extends BaseFragment
 
                         mSplash.setVisibility(View.GONE);
                         mRoot.removeView(mSplash);
+                        mSplash = null;
                     }
                 })
                 .start();
+
     }
 
     private void showChooserDialog() {
 
+        mWave.stopWave();
+
         mChooserDialog = new ChooseDrinkDialog(getActivity());
-        mChooserDialog.setOnDrinkChosenListener(MainFragment.this);
+        mChooserDialog.setOnDrinkChosenListener(this);
+
+        mChooserDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+                Log.d("MainFragment", "onDismiss");
+                mChooserDialog = null;
+                mWave.restartWave();
+            }
+        });
+
         mChooserDialog.show();
     }
 
@@ -200,17 +218,14 @@ public class MainFragment extends BaseFragment
                 )
         );
 
-        if (mChooserDialog != null) {
-
-            mChooserDialog.closeDialog();
-            mChooserDialog = null;
-        }
+        if (mChooserDialog != null) mChooserDialog.closeDialog();
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
+        mIsCreated = true;
         mInteractionListener = (MainActivity) activity;
     }
 
@@ -219,20 +234,15 @@ public class MainFragment extends BaseFragment
         super.onStop();
 
         Log.d("MainFragment", "onStop");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        mWaveView.getWave().stopWave();
+        mWave.stopWave();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        mWaveView.getWave().restartWave();
+        Log.d("MainFragment", "onResume");
+        if (mIsCreated) mWave.restartWaveSmooth();
     }
 
     @Override
@@ -246,4 +256,5 @@ public class MainFragment extends BaseFragment
 
         updateData();
     }
+
 }

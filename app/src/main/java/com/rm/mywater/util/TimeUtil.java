@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by alex on 12/04/15.
+ * Created by alex
  */
 public final class TimeUtil {
 
@@ -28,7 +28,6 @@ public final class TimeUtil {
 
     public static long getStartOfTheDay(long time) {
 
-        // TODO fix locale
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time*1000);
 
@@ -89,7 +88,7 @@ public final class TimeUtil {
 
         // FIXME if start > end
         int start = Prefs.get(sContext).getInt(Prefs.KEY_ALARM_START_FROM, 9);
-        int end   = Prefs.get(sContext).getInt(Prefs.KEY_ALARM_WORK_UNTIL, 18);
+        int end   = Prefs.get(sContext).getInt(Prefs.KEY_ALARM_WORK_UNTIL, 22);
 
         Log.d(TAG, "Start hour: " + start + " End hour: " + end);
 
